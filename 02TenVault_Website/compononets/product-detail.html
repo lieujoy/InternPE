@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details - eShop</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+        .product-detail-section {
+            padding: 80px 0;
+            min-height: 70vh;
+        }
+
+        .product-detail-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .product-image-container {
+            flex: 1;
+            min-width: 400px;
+            max-width: 550px;
+        }
+
+        .product-image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        }
+
+        .product-info-container {
+            flex: 1;
+            min-width: 350px;
+        }
+
+        .product-category {
+            color: var(--green);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .product-rating i {
+            color: #ffa500;
+            font-size: 18px;
+        }
+
+        .product-rating .rating-count {
+            color: var(--grey);
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            color: var(--light-black);
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .product-colors {
+            margin-bottom: 30px;
+        }
+
+        .product-colors h4 {
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .color-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .color-option {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .color-option:hover,
+        .color-option.active {
+            border-color: var(--black);
+            transform: scale(1.1);
+        }
+
+        .product-size {
+            margin-bottom: 30px;
+        }
+
+        .product-size h4 {
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .size-option {
+            padding: 10px 20px;
+            border: 2px solid var(--grey);
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .size-option:hover,
+        .size-option.active {
+            border-color: var(--green);
+            background: var(--green);
+            color: white;
+        }
+
+        .product-quantity {
+            margin-bottom: 30px;
+        }
+
+        .product-quantity h4 {
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--grey);
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .quantity-btn:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        .quantity-value {
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-add-cart,
+        .btn-buy-now {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-add-cart {
+            background: white;
+            color: var(--green);
+            border: 2px solid var(--green);
+        }
+
+        .btn-add-cart:hover {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-buy-now {
+            background: var(--green);
+            color: white;
+            border: 2px solid var(--green);
+        }
+
+        .btn-buy-now:hover {
+            background: var(--black);
+            border-color: var(--black);
+        }
+
+        .breadcrumb {
+            margin-bottom: 30px;
+            color: var(--grey);
+        }
+
+        .breadcrumb a {
+            color: var(--grey);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--green);
+        }
+
+        .breadcrumb span {
+            margin: 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-container {
+                gap: 30px;
+            }
+
+            .product-image-container {
+                min-width: 100%;
+            }
+
+            .product-info-container {
+                min-width: 100%;
+            }
+
+            .product-title {
+                font-size: 2rem;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+
+            .btn-add-cart,
+            .btn-buy-now {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="top-txt">
+        <div class="head container">
+            <div class="head-txt">
+                <p>Free shipping, 30-day return or refund guarantee.</p>
+            </div>
+            <div class="sing_in_up">
+                <a href="signin.html">SIGN IN</a>
+                <a href="signup.html">SIGN UP</a>
+            </div>
+        </div>
+    </section>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <input type="checkbox" name="" id="checkbox" />
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#sellers">Shop</a></li>
+                <li><a href="index.html#news">Blog</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="logo">
+                <a href="index.html"><img src="./img/logo-title.png" alt="" /></a>
+            </div>
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="product-detail-section">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <a href="index.html#sellers">Shop</a>
+                <span>/</span>
+                <span id="breadcrumb-product">Product</span>
+            </div>
+
+            <div class="product-detail-container">
+                <div class="product-image-container">
+                    <img id="product-image" src="" alt="Product Image" />
+                </div>
+
+                <div class="product-info-container">
+                    <p class="product-category" id="product-category">APPAREL</p>
+                    <h1 class="product-title" id="product-title">Loading...</h1>
+
+                    <div class="product-rating" id="product-rating">
+                        <!-- Stars will be added dynamically -->
+                    </div>
+
+                    <div class="product-price" id="product-price">₹0.00</div>
+
+                    <p class="product-description" id="product-description">
+                        Experience premium quality and style with this exclusive Ben 10 product.
+                        Crafted with attention to detail and designed for comfort and durability.
+                    </p>
+
+                    <div class="product-colors">
+                        <h4>Available Colors:</h4>
+                        <div class="color-options" id="color-options">
+                            <!-- Colors will be added dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="product-size">
+                        <h4>Select Size:</h4>
+                        <div class="size-options">
+                            <button class="size-option">S</button>
+                            <button class="size-option active">M</button>
+                            <button class="size-option">L</button>
+                            <button class="size-option">XL</button>
+                        </div>
+                    </div>
+
+                    <div class="product-quantity">
+                        <h4>Quantity:</h4>
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" id="qty-decrease">−</button>
+                            <span class="quantity-value" id="quantity">1</span>
+                            <button class="quantity-btn" id="qty-increase">+</button>
+                        </div>
+                    </div>
+
+                    <div class="product-actions">
+                        <button class="btn-add-cart">Add to Cart</button>
+                        <button class="btn-buy-now">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container container">
+            <div class="content_1">
+                <img src="./img/logo-title.png" alt="logo" />
+                <p>
+                    The customer is at the heart of our<br />unique business model,
+                    which includes<br />design.
+                </p>
+                <img src="https://i.postimg.cc/Nj9dgJ98/cards.png" alt="cards" />
+            </div>
+            <div class="content_2">
+                <h4>SHOPPING</h4>
+                <a href="index.html#sellers">Clothing Store</a>
+                <a href="index.html#sellers">Trending Shoes</a>
+                <a href="index.html#sellers">Accessories</a>
+                <a href="index.html#sellers">Top Sales</a>
+            </div>
+            <div class="content_3">
+                <h4>SHOPPING</h4>
+                <a href="index.html#contact">Contact Us</a>
+                <a href="#" target="_blank">Payment Method</a>
+                <a href="#" target="_blank">Delivery</a>
+                <a href="#" target="_blank">Return and Exchange</a>
+            </div>
+            <div class="content_4">
+                <h4>NEWLETTER</h4>
+                <p>
+                    Be the first one to know about new<br />arrivals, look books, sales &
+                    promos!
+                </p>
+                <div class="f-mail">
+                    <input type="email" placeholder="Your Email" />
+                    <i class="bx bx-envelope"></i>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="f-design">
+            <div class="f-design-txt container">
+                <p>
+                    Design and Code By
+                    <a href="https://github.com/lieujoy" target="_blank">LieuJoy</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product data
+        const products = {
+            'ben10-shoes-1': {
+                name: 'Ben10 Shoes',
+                category: 'FOOTWEAR',
+                price: '₹837.24',
+                rating: 3,
+                image: './img/products/b10-shoe-vsh1i3473lw81.webp',
+                colors: ['#f9584d', '#8989ce', '#ffffff'],
+                description: 'Step into adventure with these stylish Ben 10 shoes. Perfect for everyday wear, featuring durable construction and comfortable fit. These shoes are designed with vibrant Ben 10 graphics that kids love.'
+            },
+            'ben10-tshirt-1': {
+                name: "Ben10 Boy's T-Shirt",
+                category: 'APPAREL',
+                price: '₹517.24',
+                rating: 2,
+                image: './img/products/1ben-10-boys-39-t-shirt.jpg',
+                colors: ['#008000', '#808080', '#a0522d'],
+                description: 'Comfortable and stylish Ben 10 t-shirt for boys. Made from high-quality cotton fabric that ensures all-day comfort. Features vibrant Ben 10 prints that won\'t fade after washing.'
+            },
+            'ben10-tshirt-2': {
+                name: "Ben10 Boy's T-Shirt",
+                category: 'APPAREL',
+                price: '₹627.24',
+                rating: 4,
+                image: './img/products/b10-AC_UY1100.jpg',
+                colors: ['#a0522d', '#008000', '#8989ce'],
+                description: 'Premium quality Ben 10 t-shirt featuring your favorite character. Soft, breathable fabric perfect for active kids. Machine washable and retains its shape and color.'
+            },
+            'ben10-crocs': {
+                name: 'Crocs Creative Ben10',
+                category: 'FOOTWEAR',
+                price: '₹443.67',
+                rating: 5,
+                image: './img/products/b10-crook-wDc9cL.jpg',
+                colors: ['#f9584d', '#808080', '#8989ce'],
+                description: 'Fun and comfortable Crocs featuring Ben 10 designs. Perfect for casual wear and outdoor activities. Lightweight, water-resistant, and easy to clean.'
+            },
+            'ben10-playstation': {
+                name: 'Ben 10 - PlayStation 4',
+                category: 'GAMING',
+                price: '₹2751.23',
+                rating: 5,
+                image: './img/products/ben-10-playstation-4.jpg',
+                colors: ['#000000', '#8989ce', '#a0522d'],
+                description: 'Experience the ultimate Ben 10 adventure on PlayStation 4. Battle villains, unlock aliens, and save the world. Features stunning graphics and engaging gameplay for hours of entertainment.'
+            },
+            'ben10-bag-1': {
+                name: 'BEN 10 Cyber Bag',
+                category: 'ACCESSORIES',
+                price: '₹909.28',
+                rating: 3,
+                image: './img/products/b10-bag-723334556_max.jpg',
+                colors: ['#a0522d', '#f9584d', '#008000'],
+                description: 'Durable and spacious Ben 10 cyber bag perfect for school or travel. Features multiple compartments for organized storage. Padded straps for comfortable carrying.'
+            },
+            'ben10-sunglass': {
+                name: 'BEN 10 Sunglass',
+                category: 'ACCESSORIES',
+                price: '₹206.24',
+                rating: 5,
+                image: './img/products/b10-glass-3912.jpg',
+                colors: ['#808080', '#000000', '#000000'],
+                description: 'Stylish Ben 10 sunglasses with UV protection. Perfect for sunny days. Durable frames and scratch-resistant lenses. Cool Ben 10 logo on the sides.'
+            },
+            'ben10-bag-2': {
+                name: 'BEN 10 School Bag',
+                category: 'ACCESSORIES',
+                price: '₹543.67',
+                rating: 5,
+                image: './img/products/b10-bag-5982115.webp',
+                colors: ['#808080', '#f9584d', '#8989ce'],
+                description: 'Perfect school bag for Ben 10 fans. Spacious main compartment with additional pockets. Water-resistant material and reinforced stitching for long-lasting use.'
+            },
+            'ben10-slipper': {
+                name: 'BEN 10 Kids Slipper',
+                category: 'FOOTWEAR',
+                price: '₹337.24',
+                rating: 5,
+                image: './img/products/b10-slipper-736984.webp',
+                colors: ['#808080', '#000000', '#8989ce'],
+                description: 'Comfortable indoor/outdoor slippers for kids. Soft cushioned sole for maximum comfort. Anti-slip design for safety. Features fun Ben 10 graphics.'
+            },
+            'ben10-comics': {
+                name: 'BEN 10 Comics',
+                category: 'BOOKS',
+                price: '₹410.23',
+                rating: 5,
+                image: './img/products/ben-10-comics-original.webp',
+                colors: ['#000000', '#8989ce', '#a0522d'],
+                description: 'Exciting Ben 10 comic book collection. Follow Ben\'s adventures in stunning illustrated stories. Perfect for young readers and collectors.'
+            },
+            'ben10-tshirt-black': {
+                name: 'BEN 10 Black T-Shirt',
+                category: 'APPAREL',
+                price: '₹415.24',
+                rating: 5,
+                image: './img/products/b10-tshirt-black.jpeg',
+                colors: ['#000000', '#f9584d', '#8989ce'],
+                description: 'Classic black Ben 10 t-shirt. Premium cotton fabric for ultimate comfort. Bold Ben 10 print on the front. Perfect for casual wear and fan events.'
+            },
+            'ben10-multi-bags': {
+                name: 'BEN 10 Multi Bags',
+                category: 'ACCESSORIES',
+                price: '₹1869.28',
+                rating: 3,
+                image: './img/products/b10-multi-bags_max.jpg',
+                colors: ['#000000', '#808080', '#a0522d'],
+                description: 'Complete Ben 10 bag set including backpack, lunch bag, and pencil case. Coordinated design with Ben 10 graphics. Durable materials with easy-to-clean surfaces.'
+            }
+        };
+
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        // Load product details
+        if (productId && products[productId]) {
+            const product = products[productId];
+
+            document.getElementById('product-title').textContent = product.name;
+            document.getElementById('product-category').textContent = product.category;
+            document.getElementById('product-price').textContent = product.price;
+            document.getElementById('product-image').src = product.image;
+            document.getElementById('product-description').textContent = product.description;
+            document.getElementById('breadcrumb-product').textContent = product.name;
+            document.title = product.name + ' - eShop';
+
+            // Add rating stars
+            const ratingContainer = document.getElementById('product-rating');
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('i');
+                star.className = i < product.rating ? 'bx bxs-star' : 'bx bx-star';
+                ratingContainer.appendChild(star);
+            }
+            const ratingCount = document.createElement('span');
+            ratingCount.className = 'rating-count';
+            ratingCount.textContent = `(${product.rating}.0 stars)`;
+            ratingContainer.appendChild(ratingCount);
+
+            // Add color options
+            const colorContainer = document.getElementById('color-options');
+            product.colors.forEach((color, index) => {
+                const colorDiv = document.createElement('div');
+                colorDiv.className = 'color-option' + (index === 0 ? ' active' : '');
+                colorDiv.style.backgroundColor = color;
+                colorDiv.onclick = function () {
+                    document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                };
+                colorContainer.appendChild(colorDiv);
+            });
+        } else {
+            document.getElementById('product-title').textContent = 'Product Not Found';
+            document.getElementById('product-description').textContent = 'The product you are looking for does not exist.';
+        }
+
+        // Size selection
+        document.querySelectorAll('.size-option').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.size-option').forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Quantity controls
+        let quantity = 1;
+        document.getElementById('qty-increase').addEventListener('click', function () {
+            quantity++;
+            document.getElementById('quantity').textContent = quantity;
+        });
+
+        document.getElementById('qty-decrease').addEventListener('click', function () {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('quantity').textContent = quantity;
+            }
+        });
+
+        // Cart functions
+        function getCart() {
+            const cart = localStorage.getItem('cart');
+            return cart ? JSON.parse(cart) : [];
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function addToCart() {
+            if (!productId || !products[productId]) {
+                alert('Product not found!');
+                return;
+            }
+
+            const product = products[productId];
+            let cart = getCart();
+
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: quantity
+                });
+            }
+
+            saveCart(cart);
+            alert('Product added to cart!');
+        }
+
+        // Add to cart
+        document.querySelector('.btn-add-cart').addEventListener('click', addToCart);
+
+        // Buy now
+        document.querySelector('.btn-buy-now').addEventListener('click', function () {
+            addToCart();
+            window.location.href = 'cart.html';
+        });
+
+        // Initialize cart count
+        updateCartCount();
+
+        // Smooth scroll for menu items
+        $(".menu-items a").click(function () {
+            $("#checkbox").prop("checked", false);
+        });
+    </script>
+</body>
+
+</html>

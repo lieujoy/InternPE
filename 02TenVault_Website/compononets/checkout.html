@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - eShop</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+        .checkout-section {
+            padding: 80px 0;
+            min-height: 70vh;
+        }
+
+        .checkout-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: var(--black);
+        }
+
+        .checkout-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .checkout-form {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light-black);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .order-summary {
+            flex: 1;
+            min-width: 300px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-box {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .summary-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .order-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--black);
+        }
+
+        .order-item-quantity {
+            font-size: 14px;
+            color: var(--grey);
+        }
+
+        .order-item-price {
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .summary-row.total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding-top: 15px;
+            border-top: 2px solid var(--grey);
+            margin-top: 15px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--green);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .place-order-btn:hover {
+            background: var(--black);
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .payment-method {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .payment-method:hover,
+        .payment-method.active {
+            border-color: var(--green);
+            background: #f0f8f0;
+        }
+
+        .payment-method i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--green);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .order-summary {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="top-txt">
+        <div class="head container">
+            <div class="head-txt">
+                <p>Free shipping, 30-day return or refund guarantee.</p>
+            </div>
+            <div class="sing_in_up">
+                <a href="signin.html">SIGN IN</a>
+                <a href="signup.html">SIGN UP</a>
+            </div>
+        </div>
+    </section>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <input type="checkbox" name="" id="checkbox" />
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#sellers">Shop</a></li>
+                <li><a href="index.html#news">Blog</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="logo">
+                <a href="index.html"><img src="./img/logo-title.png" alt="" /></a>
+            </div>
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="checkout-section">
+        <div class="container">
+            <h1 class="checkout-title">Checkout</h1>
+
+            <div class="checkout-container">
+                <div class="checkout-form">
+                    <form id="checkout-form">
+                        <div class="form-section">
+                            <h3>Shipping Information</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="first-name">First Name *</label>
+                                    <input type="text" id="first-name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name">Last Name *</label>
+                                    <input type="text" id="last-name" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Street Address *</label>
+                                <input type="text" id="address" required />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State *</label>
+                                    <input type="text" id="state" required />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="zip">PIN Code *</label>
+                                    <input type="text" id="zip" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country *</label>
+                                    <select id="country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="India" selected>India</option>
+                                        <option value="USA">USA</option>
+                                        <option value="UK">UK</option>
+                                        <option value="Canada">Canada</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Payment Method</h3>
+                            <div class="payment-methods">
+                                <div class="payment-method active" onclick="selectPayment('cod')">
+                                    <i class='bx bx-money'></i>
+                                    <p>Cash on Delivery</p>
+                                </div>
+                                <div class="payment-method" onclick="selectPayment('card')">
+                                    <i class='bx bx-credit-card'></i>
+                                    <p>Credit/Debit Card</p>
+                                </div>
+                                <div class="payment-method" onclick="selectPayment('upi')">
+                                    <i class='bx bx-mobile'></i>
+                                    <p>UPI</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Additional Notes</h3>
+                            <div class="form-group">
+                                <label for="notes">Order Notes (Optional)</label>
+                                <textarea id="notes" rows="4"
+                                    placeholder="Any special instructions for delivery..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="order-summary">
+                    <div class="summary-box">
+                        <h3>Order Summary</h3>
+                        <div id="order-items">
+                            <!-- Order items will be loaded here -->
+                        </div>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₹0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping:</span>
+                            <span id="shipping">FREE</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="total">₹0.00</span>
+                        </div>
+                        <button type="button" class="place-order-btn" onclick="placeOrder()">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container container">
+            <div class="content_1">
+                <img src="./img/logo-title.png" alt="logo" />
+                <p>
+                    The customer is at the heart of our<br />unique business model,
+                    which includes<br />design.
+                </p>
+                <img src="https://i.postimg.cc/Nj9dgJ98/cards.png" alt="cards" />
+            </div>
+            <div class="content_2">
+                <h4>SHOPPING</h4>
+                <a href="index.html#sellers">Clothing Store</a>
+                <a href="index.html#sellers">Trending Shoes</a>
+                <a href="index.html#sellers">Accessories</a>
+                <a href="index.html#sellers">Top Sales</a>
+            </div>
+            <div class="content_3">
+                <h4>SHOPPING</h4>
+                <a href="index.html#contact">Contact Us</a>
+                <a href="#" target="_blank">Payment Method</a>
+                <a href="#" target="_blank">Delivery</a>
+                <a href="#" target="_blank">Return and Exchange</a>
+            </div>
+            <div class="content_4">
+                <h4>NEWLETTER</h4>
+                <p>
+                    Be the first one to know about new<br />arrivals, look books, sales &
+                    promos!
+                </p>
+                <div class="f-mail">
+                    <input type="email" placeholder="Your Email" />
+                    <i class="bx bx-envelope"></i>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="f-design">
+            <div class="f-design-txt container">
+                <p>
+                    Design and Code By
+                    <a href="https://github.com/lieujoy" target="_blank">LieuJoy</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let selectedPaymentMethod = 'cod';
+
+        function getCart() {
+            const cart = localStorage.getItem('cart');
+            return cart ? JSON.parse(cart) : [];
+        }
+
+        function updateCartCount() {
+            const cart = getCart();
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function calculateTotal() {
+            const cart = getCart();
+            return cart.reduce((total, item) => {
+                const price = parseFloat(item.price.replace('₹', '').replace(',', ''));
+                return total + (price * item.quantity);
+            }, 0);
+        }
+
+        function displayOrderSummary() {
+            const cart = getCart();
+
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            const orderItemsDiv = document.getElementById('order-items');
+            orderItemsDiv.innerHTML = cart.map(item => `
+          <div class="order-item">
+            <img src="${item.image}" alt="${item.name}" class="order-item-image" />
+            <div class="order-item-details">
+              <div class="order-item-name">${item.name}</div>
+              <div class="order-item-quantity">Qty: ${item.quantity}</div>
+            </div>
+            <div class="order-item-price">${item.price}</div>
+          </div>
+        `).join('');
+
+            const subtotal = calculateTotal();
+            const shipping = subtotal > 1000 ? 0 : 50;
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal').textContent = '₹' + subtotal.toFixed(2);
+            document.getElementById('shipping').textContent = shipping === 0 ? 'FREE' : '₹' + shipping.toFixed(2);
+            document.getElementById('total').textContent = '₹' + total.toFixed(2);
+        }
+
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.target.closest('.payment-method').classList.add('active');
+        }
+
+        function placeOrder() {
+            const form = document.getElementById('checkout-form');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const orderData = {
+                shippingInfo: {
+                    firstName: document.getElementById('first-name').value,
+                    lastName: document.getElementById('last-name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    zip: document.getElementById('zip').value,
+                    country: document.getElementById('country').value
+                },
+                items: getCart(),
+                paymentMethod: selectedPaymentMethod,
+                notes: document.getElementById('notes').value,
+                total: calculateTotal(),
+                orderDate: new Date().toISOString()
+            };
+
+            // Save order to localStorage (in a real app, this would be sent to a server)
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(orderData);
+            localStorage.setItem('orders', JSON.stringify(orders));
+
+            // Clear cart
+            localStorage.removeItem('cart');
+
+            // Show success message
+            alert('Order placed successfully! Order ID: #' + Date.now().toString(36).toUpperCase());
+
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        updateCartCount();
+        displayOrderSummary();
+
+        // Close mobile menu
+        $(".menu-items a").click(function () {
+            $("#checkbox").prop("checked", false);
+        });
+    </script>
+</body>
+
+</html>
