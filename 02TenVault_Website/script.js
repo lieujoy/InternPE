@@ -52,12 +52,12 @@ $(document).ready(function () {
     $(product.selector).css('cursor', 'pointer').on('click', function (e) {
       // Don't navigate if clicking on Buy Now button
       if (!$(e.target).closest('.buy-now').length) {
-        window.location.href = 'product-detail.html?id=' + product.id;
+        window.location.href = 'components/product-detail.html?id=' + product.id;
       }
     });
 
     // Update Buy Now buttons to go to product detail instead of #
-    $(product.selector + ' .buy-now a').attr('href', 'product-detail.html?id=' + product.id);
+    $(product.selector + ' .buy-now a').attr('href', 'components/product-detail.html?id=' + product.id);
   });
 
   // Close mobile menu when clicking on menu items
