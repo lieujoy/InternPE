@@ -8,35 +8,35 @@
 }
 
 :root {
-    /* Color Palette - Light Mode (Warm Colors - Reduced Brightness) */
-    --primary-color: #f97316;
-    --primary-hover: #ea580c;
-    --primary-light: #fed7aa;
-    --success-color: #10b981;
-    --danger-color: #ef4444;
-    --warning-color: #f59e0b;
-    --text-primary: #1c1917;
-    --text-secondary: #57534e;
-    --text-muted: #78716c;
-    --bg-primary: #fef2f2;
-    --bg-secondary: #fef8f8;
-    --border-color: #fecaca;
-    --shadow-sm: 0 1px 2px rgba(234, 88, 12, 0.1);
-    --shadow-md: 0 4px 6px rgba(234, 88, 12, 0.15);
-    --shadow-lg: 0 10px 15px rgba(234, 88, 12, 0.2);
-    --shadow-xl: 0 20px 25px rgba(234, 88, 12, 0.25);
+    /* Nike Color Palette - Bold Orange & Black */
+    --primary-color: #FF6B00;
+    --primary-hover: #E55D00;
+    --primary-light: #FFB380;
+    --success-color: #00C853;
+    --danger-color: #FF1744;
+    --warning-color: #FF6B00;
+    --text-primary: #111111;
+    --text-secondary: #333333;
+    --text-muted: #666666;
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8F8F8;
+    --border-color: #E0E0E0;
+    --shadow-sm: 0 2px 4px rgba(255, 107, 0, 0.15);
+    --shadow-md: 0 4px 12px rgba(255, 107, 0, 0.2);
+    --shadow-lg: 0 8px 24px rgba(255, 107, 0, 0.25);
+    --shadow-xl: 0 12px 32px rgba(255, 107, 0, 0.3);
 
-    /* Category Colors - Warm Tones */
-    --category-work: #f97316;
-    --category-personal: #ec4899;
-    --category-shopping: #a855f7;
-    --category-health: #10b981;
-    --category-other: #78716c;
+    /* Category Colors - Nike Energy */
+    --category-work: #FF6B00;
+    --category-personal: #FF1744;
+    --category-shopping: #9C27B0;
+    --category-health: #00C853;
+    --category-other: #666666;
 
     /* Priority Colors */
-    --priority-high: #ef4444;
-    --priority-medium: #f59e0b;
-    --priority-low: #10b981;
+    --priority-high: #FF1744;
+    --priority-medium: #FF6B00;
+    --priority-low: #00C853;
 
     /* Typography */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -67,25 +67,25 @@
     --transition-slow: 300ms ease;
 }
 
-/* Dark Mode Variables */
+/* Dark Mode Variables - Nike Dark Theme */
 body.dark-mode {
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-muted: #9ca3af;
-    --bg-primary: #1f2937;
-    --bg-secondary: #111827;
-    --border-color: #374151;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+    --text-primary: #FFFFFF;
+    --text-secondary: #CCCCCC;
+    --text-muted: #999999;
+    --bg-primary: #1E1E1E;
+    --bg-secondary: #111111;
+    --border-color: #333333;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.8);
 }
 
 body {
     font-family: var(--font-family);
-    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
     background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
+    animation: gradientShift 10s ease infinite;
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
@@ -97,7 +97,30 @@ body {
     overflow-x: hidden;
 }
 
-/* Simplified Animated Gradient Background - 2 Colors Diagonal */
+/* Add Nike Orange Accent Elements */
+body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 107, 0, 0.1) 0%, transparent 50%);
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Bold Animated Gradient Background */
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;
@@ -112,11 +135,11 @@ body {
     }
 }
 
-/* Dark Mode Gradient */
+/* Dark Mode Gradient - Even Deeper */
 body.dark-mode {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
     background-size: 400% 400%;
-    animation: gradientShiftDark 8s ease infinite;
+    animation: gradientShiftDark 10s ease infinite;
 }
 
 @keyframes gradientShiftDark {
@@ -141,17 +164,18 @@ body.dark-mode {
     max-width: 800px;
     background: var(--bg-secondary);
     backdrop-filter: blur(20px);
-    background: rgba(254, 248, 248, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-xl), 0 0 0 2px rgba(255, 107, 0, 0.2);
     overflow: hidden;
     animation: fadeInUp 0.4s ease;
-    border: 1px solid rgba(251, 146, 60, 0.2);
+    border: 2px solid rgba(255, 107, 0, 0.3);
 }
 
 body.dark-mode .container {
-    background: rgba(17, 24, 39, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(17, 17, 17, 0.98);
+    border: 2px solid rgba(255, 107, 0, 0.5);
+    box-shadow: var(--shadow-xl), 0 0 20px rgba(255, 107, 0, 0.2);
 }
 
 @keyframes fadeInUp {
@@ -170,7 +194,7 @@ body.dark-mode .container {
    Header
    =========================== */
 .header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    background: linear-gradient(135deg, #FF6B00 0%, #E55D00 50%, #111111 100%);
     color: white;
     padding: var(--spacing-xl);
     position: relative;
@@ -184,8 +208,8 @@ body.dark-mode .container {
     right: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-    animation: pulse 4s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    animation: pulse 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -193,12 +217,12 @@ body.dark-mode .container {
     0%,
     100% {
         transform: scale(1);
-        opacity: 0.5;
+        opacity: 0.6;
     }
 
     50% {
-        transform: scale(1.1);
-        opacity: 0.8;
+        transform: scale(1.2);
+        opacity: 1;
     }
 }
 
@@ -209,15 +233,18 @@ body.dark-mode .container {
 
 .title {
     font-size: var(--font-size-2xl);
-    font-weight: 700;
+    font-weight: 900;
     margin-bottom: var(--spacing-xs);
-    letter-spacing: -0.02em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
     font-size: var(--font-size-sm);
-    opacity: 0.9;
-    font-weight: 300;
+    opacity: 0.95;
+    font-weight: 400;
+    letter-spacing: 0.05em;
 }
 
 .dark-mode-toggle {
@@ -349,9 +376,9 @@ body.dark-mode .container {
 .add-btn {
     padding: var(--spacing-md) var(--spacing-lg);
     font-size: var(--font-size-base);
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--font-family);
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     color: white;
     border: none;
     border-radius: var(--radius-md);
@@ -361,16 +388,18 @@ body.dark-mode .container {
     gap: var(--spacing-xs);
     transition: all var(--transition-base);
     white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .add-btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--primary-hover) 0%, #CC4A00 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(255, 107, 0, 0.4), 0 0 20px rgba(255, 107, 0, 0.3);
 }
 
 .add-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(1.02);
 }
 
 /* ===========================
@@ -405,13 +434,14 @@ body.dark-mode .container {
 
 .filter-btn:hover {
     color: var(--text-primary);
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(255, 107, 0, 0.1);
 }
 
 .filter-btn.active {
-    background: var(--bg-secondary);
-    color: var(--primary-color);
-    box-shadow: var(--shadow-sm);
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+    font-weight: 700;
 }
 
 .category-filter {
@@ -521,8 +551,8 @@ body.dark-mode .container {
 
 .task-item:hover {
     border-color: var(--primary-color);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.25), 0 0 12px rgba(255, 107, 0, 0.15);
+    transform: translateY(-3px);
 }
 
 .task-item.completed {
@@ -706,13 +736,15 @@ body.dark-mode .container {
 .edit-btn:hover {
     background: var(--primary-color);
     color: white;
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.4);
 }
 
 .delete-btn:hover {
     background: var(--danger-color);
     color: white;
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(255, 23, 68, 0.4);
 }
 
 .edit-btn svg,
@@ -778,8 +810,8 @@ body.dark-mode .container {
     background: var(--danger-color);
     color: white;
     border-color: var(--danger-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 23, 68, 0.3);
 }
 
 /* ===========================
@@ -921,8 +953,8 @@ body.dark-mode .container {
 
 .btn-primary:hover {
     background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
 }
 
 .btn-secondary {
