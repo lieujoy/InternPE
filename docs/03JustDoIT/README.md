@@ -54,13 +54,13 @@ This todo app embodies the Nike spirit with:
 
 ## 📁 File Structure
 
-\`\`\`
+```
 03JustDoIT/
 ├── index.html      # Main HTML with Nike branding
 ├── styles.css      # Nike-themed styling and animations
 ├── script.js       # Application logic
 └── README.md       # This file
-\`\`\`
+```
 
 ## 🎨 Nike Design System
 
@@ -94,7 +94,7 @@ graph TD
 
 ## 🏗️ Application Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TB
     subgraph User Interface
         A[Header - JUST DO IT]
@@ -127,11 +127,11 @@ graph TB
     I --> E
     J --> A
     K --> G
-\`\`\`
+```
 
 ## � Data Flow Diagram
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant User
     participant UI
@@ -155,11 +155,11 @@ sequenceDiagram
     UI->>State: Filter by Query
     State-->>UI: Return Matches
     UI-->>User: Display Results
-\`\`\`
+```
 
 ## 🔄 Task State Management
 
-\`\`\`mermaid
+```mermaid
 stateDiagram-v2
     [*] --> Active: Create Task
     Active --> Completed: Mark Complete
@@ -169,7 +169,7 @@ stateDiagram-v2
     Active --> Deleted: Delete
     Completed --> Deleted: Delete
     Deleted --> [*]
-\`\`\`
+```
 
 ## 🎯 Features Overview
 

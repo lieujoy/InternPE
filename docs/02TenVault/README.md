@@ -49,7 +49,7 @@ A fully-featured e-commerce website for Ben 10 merchandise, featuring a modern d
 
 ## 🏗️ Application Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TB
     subgraph Frontend Pages
         A[index.html - Home]
@@ -83,11 +83,11 @@ graph TB
     H --> N
     K --> N
     L --> J
-\`\`\`
+```
 
 ## 📊 Shopping Cart Data Flow
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant User
     participant ProductCard
@@ -108,11 +108,11 @@ sequenceDiagram
     CartManager->>LocalStorage: Fetch Data
     LocalStorage-->>CartManager: Return Cart Items
     CartManager-->>User: Display Cart Page
-\`\`\`
+```
 
 ## 🔄 User Authentication Flow
 
-\`\`\`mermaid
+```mermaid
 stateDiagram-v2
     [*] --> HomePage: Visit Site
     HomePage --> SignInPage: Click Sign In
@@ -130,11 +130,11 @@ stateDiagram-v2
     ProductPage --> CartPage: Add to Cart
     CartPage --> CheckoutPage: Proceed to Checkout
     CheckoutPage --> SignInPage: Not Logged In
-\`\`\`
+```
 
 ## 📂 Project Structure
 
-\`\`\`
+```
 02TenVault/
 ├── index.html                 # Main landing page
 ├── style.css                  # Complete styling and animations
@@ -151,7 +151,7 @@ stateDiagram-v2
 │   ├── bgm.mp3               # Background music
 │   └── products/             # Product images
 └── README.md                  # This documentation
-\`\`\`
+```
 
 ## 🛠️ Technologies Used
 

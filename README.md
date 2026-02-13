@@ -156,10 +156,10 @@ A bold, energetic task management app inspired by Nike's "Just Do It" philosophy
 ### Running the Projects
 
 #### Option 1: Clone Repository
-\`\`\`bash
+```bash
 git clone https://github.com/lieujoy/InternPE.git
 cd InternPE
-\`\`\`
+```
 
 #### Option 2: Download ZIP
 Download and extract from GitHub
@@ -176,7 +176,7 @@ Download and extract from GitHub
 
 ## 📂 Repository Structure
 
-\`\`\`
+```
 InternPE/
 ├── README.md                          # This file - Main documentation
 │
@@ -211,7 +211,7 @@ InternPE/
 │       └── README.md                 # Todo app documentation
 │
 └── .git/                              # Git version control
-\`\`\`
+```
 
 ---
 

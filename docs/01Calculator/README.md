@@ -25,16 +25,16 @@ A clean, modern calculator web application built with vanilla HTML, CSS, and Jav
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 01Calculator/
 ├── index.html          # Main HTML structure with embedded CSS
 ├── script.js           # Calculator logic and functionality
 └── README.md           # This documentation
-\`\`\`
+```
 
 ## 🏗️ Application Architecture
 
-\`\`\`mermaid
+```mermaid
 graph TB
     subgraph UI Layer
         A[Display - Current Input]
@@ -57,11 +57,11 @@ graph TB
     G --> H
     H --> A
     H --> B
-\`\`\`
+```
 
 ## 📊 Data Flow Diagram
 
-\`\`\`mermaid
+```mermaid
 sequenceDiagram
     participant User
     participant UI
@@ -82,11 +82,11 @@ sequenceDiagram
     Handler->>Engine: Reset State
     Engine->>Display: Clear Display
     Display->>UI: Show Empty
-\`\`\`
+```
 
 ## 🔄 Calculator State Machine
 
-\`\`\`mermaid
+```mermaid
 stateDiagram-v2
     [*] --> Empty: Initialize
     Empty --> EnteringFirst: Input Number
@@ -100,7 +100,7 @@ stateDiagram-v2
     ShowResult --> Empty: Press CLEAR
     EnteringFirst --> EnteringFirst: Press DEL
     EnteringSecond --> EnteringSecond: Press DEL
-\`\`\`
+```
 
 ## 🎨 Design Features
 
@@ -113,7 +113,7 @@ stateDiagram-v2
 - **Delete Button**: Orange (#f39c12)
 
 ### Button Layout (4×5 Grid)
-\`\`\`
+```
 ╔══════════════════════════╗
 ║   History Display        ║
 ║   Current Input          ║
@@ -128,7 +128,7 @@ stateDiagram-v2
 ╠══════╧══════╬══════╧═════╣
 ║   CLEAR     ║      =      ║
 ╚═════════════╩═════════════╝
-\`\`\`
+```
 
 ### Animation Effects
 - **Button Hover**: Transform scale(1.05) + brightness
@@ -172,14 +172,14 @@ The calculator automatically adjusts for screens **≤ 400px**:
 - Smaller padding (30px → 20px)
 - Adjusted font sizes for mobile viewing
 
-\`\`\`css
+```css
 @media (max-width: 400px) {
     .calculator {
         width: 95%;
         padding: 20px;
     }
 }
-\`\`\`
+```
 
 ## 🎯 Key Features Breakdown
 
@@ -195,15 +195,15 @@ The calculator automatically adjusts for screens **≤ 400px**:
 ## 🔍 Code Highlights
 
 ### Display Update Function
-\`\`\`javascript
+```javascript
 function updateDisplay() {
     currentDisplay.textContent = currentInput || '0';
     historyDisplay.textContent = history;
 }
-\`\`\`
+```
 
 ### Operation Handler
-\`\`\`javascript
+```javascript
 function handleOperation(operator) {
     if (currentInput !== '') {
         if (previousInput !== '') {
@@ -215,7 +215,7 @@ function handleOperation(operator) {
         updateHistory();
     }
 }
-\`\`\`
+```
 
 ## 🎨 Design Philosophy
 
