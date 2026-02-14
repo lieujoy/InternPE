@@ -34,7 +34,7 @@ A bold, energetic task manager inspired by Nike.
 
 Navigate to any project folder and open `index.html` in your browser:
 
-\`\`\`bash
+```bash
 # Calculator
 cd 01Calculator && open index.html
 
@@ -43,7 +43,7 @@ cd 02TenVault && open index.html
 
 # JUST DO IT
 cd 03JustDoIT && open index.html
-\`\`\`
+```
 
 ## 📖 Documentation
 

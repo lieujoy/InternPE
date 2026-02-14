@@ -18,7 +18,7 @@ Welcome to my InternPE internship portfolio! This repository contains three prog
 
 ### 1. 🧮 Simple Calculator
 **Location**: [`docs/01Calculator/`](docs/01Calculator/)  
-**Live Demo**: Open `docs/01Calculator/index.html`
+**Live Demo**: [https://lieujoy.github.io/InternPE/01Calculator/](https://lieujoy.github.io/InternPE/01Calculator/)
 
 A clean, modern calculator with beautiful purple gradient design and smooth animations.
 
@@ -48,7 +48,7 @@ A clean, modern calculator with beautiful purple gradient design and smooth anim
 
 ### 2. 🛍️ TEN VAULT - Ben 10 Merchandise Store
 **Location**: [`docs/02TenVault/`](docs/02TenVault/)  
-**Live Demo**: [https://lieujoy.github.io/InternPE/](https://lieujoy.github.io/InternPE/)
+**Live Demo**: [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/)
 
 A fully-featured e-commerce website for Ben 10 merchandise with modern design and complete shopping functionality.
 
@@ -90,7 +90,7 @@ A fully-featured e-commerce website for Ben 10 merchandise with modern design an
 
 ### 3. ✅ JUST DO IT - Nike-Inspired Todo App
 **Location**: [`docs/03JustDoIT/`](docs/03JustDoIT/)  
-**Live Demo**: Open `docs/03JustDoIT/index.html`
+**Live Demo**: [https://lieujoy.github.io/InternPE/03JustDoIT/](https://lieujoy.github.io/InternPE/03JustDoIT/)
 
 A bold, energetic task management app inspired by Nike's "Just Do It" philosophy with professional features and Nike-themed design.
 
@@ -357,11 +357,6 @@ All projects are fully responsive and tested on:
 
 ---
 
-## 🔗 Links & Resources
-
-### Live Deployments
-- **TEN VAULT Store**: [https://lieujoy.github.io/InternPE/](https://lieujoy.github.io/InternPE/)
-- **GitHub Repository**: [https://github.com/lieujoy/InternPE](https://github.com/lieujoy/InternPE)
 
 ### Documentation
 - [Calculator Documentation](docs/01Calculator/README.md)

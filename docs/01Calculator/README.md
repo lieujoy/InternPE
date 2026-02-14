@@ -2,6 +2,10 @@
 
 A clean, modern calculator web application built with vanilla HTML, CSS, and JavaScript. Features a beautiful gradient design with smooth animations and full mathematical functionality.
 
+## 🌐 Live Demo
+
+**Visit Calculator**: [https://lieujoy.github.io/InternPE/01Calculator/](https://lieujoy.github.io/InternPE/01Calculator/)
+
 ## ✨ Features
 
 ### Core Functionality

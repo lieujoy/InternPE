@@ -6,7 +6,7 @@ A fully-featured e-commerce website for Ben 10 merchandise, featuring a modern d
 
 ## 🌐 Live Demo
 
-**Visit TEN VAULT**: [https://lieujoy.github.io/InternPE/](https://lieujoy.github.io/InternPE/)
+**Visit TEN VAULT**: [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/)
 
 ## ✨ Features
 
@@ -378,4 +378,4 @@ Potential improvements:
 
 *It's Hero Time! Transform your style with TEN VAULT* 🎮
 
-**Shop Now**: [https://lieujoy.github.io/InternPE/](https://lieujoy.github.io/InternPE/)
+**Shop Now**: [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/)

@@ -12,6 +12,10 @@ This todo app embodies the Nike spirit with:
 - **Dynamic Animations**: Energetic hover effects and glowing interactions
 - **Action-Oriented**: "JUST DO IT" messaging encouraging productivity
 
+## 🌐 Live Demo
+
+**Visit JUST DO IT**: [https://lieujoy.github.io/InternPE/03JustDoIT/](https://lieujoy.github.io/InternPE/03JustDoIT/)
+    
 ## ✨ Features
 
 ### Core Functionality
@@ -222,23 +226,23 @@ stateDiagram-v2
 ## 🎨 CSS Animation Examples
 
 ### Orange Glow Effect
-\`\`\`css
+```css
 .add-btn:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 8px 24px rgba(255, 107, 0, 0.4),
                 0 0 20px rgba(255, 107, 0, 0.3);
 }
-\`\`\`
+```
 
 ### Task Item Hover
-\`\`\`css
+```css
 .task-item:hover {
     border-color: #FF6B00;
     box-shadow: 0 6px 20px rgba(255, 107, 0, 0.25),
                 0 0 12px rgba(255, 107, 0, 0.15);
     transform: translateY(-3px);
 }
-\`\`\`
+```
 
 ## 📱 Responsive Design
 
