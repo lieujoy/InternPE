@@ -8,8 +8,8 @@ Welcome to my InternPE internship portfolio! This repository contains three prog
 
 | Project | Live Link | Status |
 |---------|-----------|--------|
-| **TEN VAULT Store** | [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/) | ✅ Live |
 | **Calculator** | [https://lieujoy.github.io/InternPE/01Calculator/](https://lieujoy.github.io/InternPE/01Calculator/) | ✅ Live |
+| **TEN VAULT Store** | [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/) | ✅ Live |
 | **JUST DO IT Todo** | [https://lieujoy.github.io/InternPE/03JustDoIT/](https://lieujoy.github.io/InternPE/03JustDoIT/) | ✅ Live |
 
 ---
