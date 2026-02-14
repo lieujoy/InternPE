@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four - Straw Hats vs Marines | One Piece</title>
+    <meta name="description"
+        content="Epic Connect Four game featuring One Piece Straw Hat Pirates vs Marines with anime-style animations and bounty effects">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="particle-container" id="particles"></div>
+        <!-- Ocean Wave Layers - Visible only during Marine theme -->
+        <div class="wave-layer wave-layer-1"></div>
+        <div class="wave-layer wave-layer-2"></div>
+        <div class="wave-layer wave-layer-3"></div>
+
+        <!-- Pirate Ship - Straw Hats Theme -->
+        <div class="pirate-ship">
+            <div class="pirate-ship-body">
+                <div class="ship-windows">
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                </div>
+            </div>
+            <div class="pirate-ship-deck"></div>
+            <div class="pirate-ship-mast">
+                <div class="pirate-flag"></div>
+            </div>
+        </div>
+
+        <!-- Marine Ship - Marines Theme -->
+        <div class="marine-ship">
+            <div class="marine-ship-body">
+                <div class="ship-windows">
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                </div>
+            </div>
+            <div class="marine-ship-deck"></div>
+            <div class="marine-ship-mast">
+                <div class="marine-flag"></div>
+            </div>
+        </div>
+
+        <!-- Pirate Ship - Clone for wrapping effect -->
+        <div class="pirate-ship pirate-ship-clone">
+            <div class="pirate-ship-body">
+                <div class="ship-windows">
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                </div>
+            </div>
+            <div class="pirate-ship-deck"></div>
+            <div class="pirate-ship-mast">
+                <div class="pirate-flag"></div>
+            </div>
+        </div>
+
+        <!-- Marine Ship - Clone for wrapping effect -->
+        <div class="marine-ship marine-ship-clone">
+            <div class="marine-ship-body">
+                <div class="ship-windows">
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                    <div class="ship-window"></div>
+                </div>
+            </div>
+            <div class="marine-ship-deck"></div>
+            <div class="marine-ship-mast">
+                <div class="marine-flag"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="game-header">
+            <h1 class="game-title">
+                <div class="title-pirate">
+                    <span class="title-icon">👒</span>
+                    <span class="pirate-text">STRAW HATS</span>
+                </div>
+                <div class="vs-icons">
+                    <span class="icon-roger" title="Gold Roger">☠️</span>
+                    <span class="vs-divider">⚔️</span>
+                    <span class="icon-admiral" title="Admiral">🎖️</span>
+                </div>
+                <div class="title-marine">
+                    <span class="marine-text">MARINES</span>
+                    <span class="title-icon">🎖️</span>
+                </div>
+            </h1>
+            <p class="game-subtitle">🏴‍☠️ Connect Four • Grand Line Battle 🌊</p>
+        </header>
+
+
+        <div class="game-controls">
+            <div class="player-indicator" id="playerIndicator">
+                <div class="indicator-piece"></div>
+                <div class="turn-display">
+                    <span class="turn-icon-above">👒</span>
+                    <span class="turn-label">STRAW HATS' TURN</span>
+                </div>
+            </div>
+
+            <div class="game-board-wrapper">
+                <!-- SVG overlay for arrows -->
+                <svg class="arrow-overlay" id="arrowOverlay">
+                    <defs>
+                        <linearGradient id="pirateGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#DC143C;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="marineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+                </svg>
+
+                <div class="game-board" id="gameBoard">
+                    <!-- Column buttons will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <button class="reset-btn" id="resetBtn">
+                <span>⟳</span> New Game
+            </button>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-item pirate-stat">
+                <span class="stat-label">🏴‍☠️ Pirate Bounties</span>
+                <span class="stat-value" id="pirateWins">0</span>
+            </div>
+            <div class="stat-item marine-stat">
+                <span class="stat-label">⚓ Marine Victories</span>
+                <span class="stat-value" id="marineWins">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div class="victory-modal" id="victoryModal">
+        <div class="modal-content">
+            <div class="victory-icon" id="victoryIcon"></div>
+            <h2 class="victory-title" id="victoryTitle">STRAW HATS WIN!</h2>
+            <p class="victory-message" id="victoryMessage">We're gonna be King of the Pirates!</p>
+            <button class="play-again-btn" id="playAgainBtn">
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
