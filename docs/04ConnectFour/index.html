@@ -1,298 +1,493 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect Four — Anime Edition</title>
+    <meta
+      name="description"
+      content="Epic anime-themed Connect Four game with 11 unique themes. Play vs a friend or challenge the AI!"
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect Four - Straw Hats vs Marines | One Piece</title>
-    <meta name="description"
-        content="Epic Connect Four game featuring One Piece Straw Hat Pirates vs Marines with anime-style animations and bounty effects">
-    <link rel="stylesheet" href="styles.css">
-</head>
+  <body>
+    <!-- Isolated background layer: animations run here, not on body -->
+    <div id="bgLayer" class="bg-layer"></div>
 
-<body>
     <div class="background-effects">
-        <div class="particle-container" id="particles"></div>
-        <!-- Ocean Wave Layers - Visible only during Marine theme -->
-        <div class="wave-layer wave-layer-1"></div>
-        <div class="wave-layer wave-layer-2"></div>
-        <div class="wave-layer wave-layer-3"></div>
-
-        <!-- Pirate Ship - Straw Hats Theme -->
-        <div class="pirate-ship">
-            <div class="pirate-ship-body">
-                <div class="ship-windows">
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                </div>
-            </div>
-            <div class="pirate-ship-deck"></div>
-            <div class="pirate-ship-mast">
-                <div class="pirate-flag"></div>
-            </div>
-        </div>
-
-        <!-- Marine Ship - Marines Theme -->
-        <div class="marine-ship">
-            <div class="marine-ship-body">
-                <div class="ship-windows">
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                </div>
-            </div>
-            <div class="marine-ship-deck"></div>
-            <div class="marine-ship-mast">
-                <div class="marine-flag"></div>
-            </div>
-        </div>
-
-        <!-- Pirate Ship - Clone for wrapping effect -->
-        <div class="pirate-ship pirate-ship-clone">
-            <div class="pirate-ship-body">
-                <div class="ship-windows">
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                </div>
-            </div>
-            <div class="pirate-ship-deck"></div>
-            <div class="pirate-ship-mast">
-                <div class="pirate-flag"></div>
-            </div>
-        </div>
-
-        <!-- Marine Ship - Clone for wrapping effect -->
-        <div class="marine-ship marine-ship-clone">
-            <div class="marine-ship-body">
-                <div class="ship-windows">
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                    <div class="ship-window"></div>
-                </div>
-            </div>
-            <div class="marine-ship-deck"></div>
-            <div class="marine-ship-mast">
-                <div class="marine-flag"></div>
-            </div>
-        </div>
+      <div class="particle-container" id="particles"></div>
     </div>
 
     <div class="container">
-        <header class="game-header">
-            <h1 class="game-title">
-                <div class="title-pirate">
-                    <span class="title-icon">👒</span>
-                    <span class="pirate-text">STRAW HATS</span>
-                </div>
-                <div class="vs-icons">
-                    <span class="icon-roger" title="Gold Roger">☠️</span>
-                    <span class="vs-divider">⚔️</span>
-                    <span class="icon-admiral" title="Admiral">🎖️</span>
-                </div>
-                <div class="title-marine">
-                    <span class="marine-text">MARINES</span>
-                    <span class="title-icon">🎖️</span>
-                </div>
-            </h1>
-            <p class="game-subtitle">🏴‍☠️ Connect Four • Grand Line Battle 🌊</p>
-        </header>
+      <header class="game-header">
+        <h1 class="game-title">
+          <div class="title-pirate">
+            <span class="title-icon">👒</span>
+            <span class="pirate-text">STRAW HATS</span>
+          </div>
+          <div class="vs-icons">
+            <span class="icon-roger" title="Gold Roger">☠️</span>
+            <span class="vs-divider">⚔️</span>
+            <span class="icon-admiral" title="Admiral">🎖️</span>
+          </div>
+          <div class="title-marine">
+            <span class="marine-text">MARINES</span>
+            <span class="title-icon">🎖️</span>
+          </div>
+        </h1>
+        <p class="game-subtitle">🏴‍☠️ Connect Four • Grand Line Battle 🌊</p>
+      </header>
 
-
-        <div class="game-controls">
-            <div class="player-indicator" id="playerIndicator">
-                <div class="turn-display">
-                    <span class="turn-icon-above">👒</span>
-                    <span class="turn-label">STRAW HATS' TURN</span>
-                </div>
+      <div class="game-controls">
+        <div class="game-layout-row">
+          <!-- LEFT COL: Turn indicator -->
+          <div class="player-indicator" id="playerIndicator">
+            <div class="turn-display">
+              <span class="turn-icon-above">👒</span>
+              <span class="turn-label">STRAW HATS' TURN</span>
             </div>
-
-            <div class="game-board-wrapper">
-                <!-- SVG overlay for arrows -->
-                <svg class="arrow-overlay" id="arrowOverlay">
-                    <defs>
-                        <linearGradient id="pirateGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#DC143C;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="marineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
-                        </linearGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                            <feMerge>
-                                <feMergeNode in="coloredBlur" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
-                </svg>
-
-                <div class="game-board" id="gameBoard">
-                    <!-- Column buttons will be generated by JavaScript -->
-                </div>
+            <div class="timer-display hidden" id="timerDisplay">
+              <span id="timerValue">30</span>s
             </div>
+          </div>
 
-            <button class="reset-btn" id="resetBtn">
-                <span>⟳</span> New Game
+          <!-- CENTRE COL: Board with corner pills -->
+          <div class="game-board-wrapper">
+            <!-- 💡 Hint — just outside top-left corner -->
+            <button
+              class="hint-btn hidden"
+              id="hintBtn"
+              title="Show best move hint"
+            >
+              💡 Hint
             </button>
-        </div>
 
-        <div class="game-stats">
-            <div class="stat-item pirate-stat">
-                <span class="stat-label">🏴‍☠️ Pirate Bounties</span>
-                <span class="stat-value" id="pirateWins">0</span>
+            <!-- AI Thinking — just outside top-right corner -->
+            <div class="ai-thinking hidden" id="aiThinking">
+              <div class="thinking-spinner"></div>
+              <span>AI Thinking…</span>
             </div>
-            <div class="stat-item marine-stat">
-                <span class="stat-label">⚓ Marine Victories</span>
-                <span class="stat-value" id="marineWins">0</span>
+
+            <!-- AI explanation toast -->
+            <div class="ai-explanation hidden" id="aiExplanation">
+              <span id="aiExplanationText"></span>
             </div>
+
+            <!-- SVG win-arrow overlay -->
+            <svg class="arrow-overlay" id="arrowOverlay">
+              <defs>
+                <linearGradient
+                  id="pirateGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #dc143c; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #ffd700; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="marineGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop
+                    offset="0%"
+                    style="stop-color: #1e40af; stop-opacity: 1"
+                  />
+                  <stop
+                    offset="100%"
+                    style="stop-color: #ffffff; stop-opacity: 1"
+                  />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                  <feMerge>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+            </svg>
+
+            <div class="game-board" id="gameBoard"></div>
+          </div>
+
+          <!-- RIGHT COL: New Game button -->
+          <div class="game-right-col">
+            <button class="reset-btn" id="resetBtn">
+              <span>⟳</span> New Game
+            </button>
+          </div>
         </div>
+        <!-- /.game-layout-row -->
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-item pirate-stat">
+          <span class="stat-label">🏴‍☠️ Pirate Bounties</span>
+          <span class="stat-value" id="pirateWins">0</span>
+        </div>
+        <div class="stat-item marine-stat">
+          <span class="stat-label">⚓ Marine Victories</span>
+          <span class="stat-value" id="marineWins">0</span>
+        </div>
+      </div>
     </div>
 
     <!-- Startup Modal - Player Selection -->
     <div class="startup-modal show" id="startupModal">
-        <div class="modal-content startup-content">
-            <h1 class="startup-title">⚔️ Connect Four ⚔️</h1>
-            <p class="startup-subtitle">Choose Your Battle Mode</p>
-
-            <div class="mode-selection">
-                <button class="mode-btn" id="vsHumanBtn">
-                    <span class="mode-icon">👫</span>
-                    <span class="mode-title">Squad Up</span>
-                    <span class="mode-desc">Play with your bestie IRL</span>
-                </button>
-
-                <button class="mode-btn" id="vsAIBtn">
-                    <span class="mode-icon">🤖</span>
-                    <span class="mode-title">Solo Challenge</span>
-                    <span class="mode-desc">Face the AI boss</span>
-                </button>
-            </div>
-
-
-
-            <!-- AI Difficulty Selection (initially hidden) -->
-            <div class="difficulty-selection hidden" id="difficultySelection">
-                <h3>Select Difficulty</h3>
-                <div class="difficulty-buttons">
-                    <button class="difficulty-btn" data-difficulty="easy">
-                        <span>😊 Easy</span>
-                        <small>Random moves</small>
-                    </button>
-                    <button class="difficulty-btn" data-difficulty="medium">
-                        <span>😐 Medium</span>
-                        <small>Smart moves</small>
-                    </button>
-                    <button class="difficulty-btn" data-difficulty="hard">
-                        <span>😈 Hard</span>
-                        <small>Expert player</small>
-                    </button>
-                </div>
-                <button class="back-btn-bottom" id="backToModeBtn">← Back</button>
-            </div>
-
-            <!-- Game Mode Selection -->
-            <div class="gamemode-selection hidden" id="gameModeSelection">
-                <button class="icon-back-btn" id="backToDifficultyBtn" title="Back">←</button>
-                <h3>Select Game Mode</h3>
-                <div class="gamemode-buttons">
-                    <button class="gamemode-btn active" data-mode="classic">
-                        <span>🎮 Classic</span>
-                        <small>Standard 6x7 board</small>
-                    </button>
-                    <button class="gamemode-btn" data-mode="timed">
-                        <span>⏱️ Timed</span>
-                        <small>30 seconds per move</small>
-                    </button>
-                    <button class="gamemode-btn" data-mode="custom">
-                        <span>⚙️ Custom</span>
-                        <small>Choose board size</small>
-                    </button>
-                </div>
-
-                <!-- Custom Board Size (shown when custom mode selected) -->
-                <div class="board-size-selection hidden" id="boardSizeSelection">
-                    <h4>Select Board Size</h4>
-                    <div class="size-buttons">
-                        <button class="size-btn active" data-rows="6" data-cols="7">6×7<small>Classic</small></button>
-                        <button class="size-btn" data-rows="7" data-cols="7">7×7<small>Square</small></button>
-                        <button class="size-btn" data-rows="8" data-cols="8">8×8<small>Large</small></button>
-                        <button class="size-btn" data-rows="5" data-cols="6">5×6<small>Small</small></button>
-                    </div>
-                </div>
-
-                <button class="start-game-btn" id="startGameBtn">Start Game</button>
-            </div>
+      <div class="modal-content startup-content">
+        <div class="startup-header">
+          <h1 class="startup-title">⚔️ Connect Four ⚔️</h1>
+          <p class="startup-subtitle">Choose Your Battle Mode</p>
         </div>
+
+        <!-- Wrapper for scrollable content -->
+        <div class="scrollable-modal-body">
+          <!-- ✨ THEME PREVIEW CAROUSEL -->
+          <div class="theme-carousel-section">
+            <p class="theme-carousel-label">🎨 Choose Your Anime Universe</p>
+            <div class="theme-carousel" id="themeCarousel">
+              <button class="theme-card active" data-theme="onePiece">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #b3e5fc 0%,
+                      #01579b 40%,
+                      #bf360c 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🏴‍☠️</span>
+                <span class="theme-card-name">One Piece</span>
+              </button>
+              <button class="theme-card" data-theme="naruto">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #1565c0 0%,
+                      #546e7a 45%,
+                      #e65100 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🍃</span>
+                <span class="theme-card-name">Naruto</span>
+              </button>
+              <button class="theme-card" data-theme="dragonBall">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #00acc1 0%,
+                      #388e3c 45%,
+                      #e64a19 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🐉</span>
+                <span class="theme-card-name">Dragon Ball</span>
+              </button>
+              <button class="theme-card" data-theme="onePunchMan">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #263238 0%,
+                      #546e7a 40%,
+                      #f57f17 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">👊</span>
+                <span class="theme-card-name">One Punch Man</span>
+              </button>
+              <button class="theme-card" data-theme="demonSlayer">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #0a0014 0%,
+                      #4a0080 50%,
+                      #7b1fa2 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🗡️</span>
+                <span class="theme-card-name">Demon Slayer</span>
+              </button>
+              <button class="theme-card" data-theme="attackOnTitan">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #37474f 0%,
+                      #455a64 35%,
+                      #b71c1c 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🧱</span>
+                <span class="theme-card-name">Attack on Titan</span>
+              </button>
+              <button class="theme-card" data-theme="pokemon">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #0d47a1 0%,
+                      #1a237e 45%,
+                      #b71c1c 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">⚡</span>
+                <span class="theme-card-name">Pokémon</span>
+              </button>
+              <button class="theme-card" data-theme="jujutsuKaisen">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #000000 0%,
+                      #880e4f 45%,
+                      #1a0000 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🤞</span>
+                <span class="theme-card-name">Jujutsu Kaisen</span>
+              </button>
+              <button class="theme-card" data-theme="hunterXHunter">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #1a1a2e 0%,
+                      #2e7d32 50%,
+                      #f57f17 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">🎣</span>
+                <span class="theme-card-name">Hunter x Hunter</span>
+              </button>
+              <button class="theme-card" data-theme="bleach">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #000000 0%,
+                      #1a237e 30%,
+                      #f5f5f5 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">👘</span>
+                <span class="theme-card-name">Bleach</span>
+              </button>
+              <button class="theme-card" data-theme="berserk">
+                <div
+                  class="theme-card-bg"
+                  style="
+                    background: linear-gradient(
+                      180deg,
+                      #1a0000 0%,
+                      #8b0000 40%,
+                      #000000 100%
+                    );
+                  "
+                ></div>
+                <span class="theme-card-icon">⚔️</span>
+                <span class="theme-card-name">Berserk</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mode-selection">
+            <button class="mode-btn" id="vsHumanBtn">
+              <span class="mode-icon">👫</span>
+              <span class="mode-title">Squad Up</span>
+              <span class="mode-desc">Play with your bestie IRL</span>
+            </button>
+
+            <button class="mode-btn" id="vsAIBtn">
+              <span class="mode-icon">🤖</span>
+              <span class="mode-title">Solo Challenge</span>
+              <span class="mode-desc">Face the AI boss</span>
+            </button>
+          </div>
+
+          <!-- AI Difficulty Selection (initially hidden) -->
+          <div class="difficulty-selection hidden" id="difficultySelection">
+            <h3>Select Difficulty</h3>
+            <div class="difficulty-buttons">
+              <button class="difficulty-btn" data-difficulty="easy">
+                <span>😊 Easy</span>
+                <small>Random moves</small>
+              </button>
+              <button class="difficulty-btn" data-difficulty="medium">
+                <span>😐 Medium</span>
+                <small>Smart moves</small>
+              </button>
+              <button class="difficulty-btn" data-difficulty="hard">
+                <span>😈 Hard</span>
+                <small>Expert player</small>
+              </button>
+              <button class="difficulty-btn" data-difficulty="extreme">
+                <span>💀 Extreme</span>
+                <small>Never loses — good luck</small>
+              </button>
+            </div>
+            <button class="back-btn-bottom" id="backToModeBtn">← Back</button>
+          </div>
+
+          <!-- Game Mode Selection -->
+          <div class="gamemode-selection hidden" id="gameModeSelection">
+            <button class="icon-back-btn" id="backToDifficultyBtn" title="Back">
+              ←
+            </button>
+            <h3>Select Game Mode</h3>
+            <div class="gamemode-buttons">
+              <button class="gamemode-btn active" data-mode="classic">
+                <span>🎮 Classic</span>
+                <small>Standard 6x7 board</small>
+              </button>
+              <button class="gamemode-btn" data-mode="timed">
+                <span>⏱️ Timed</span>
+                <small>30 seconds per move</small>
+              </button>
+              <button class="gamemode-btn" data-mode="custom">
+                <span>⚙️ Custom</span>
+                <small>Choose board size</small>
+              </button>
+            </div>
+            <!-- Using unique ID for bottom back button -->
+            <button class="back-btn-bottom" id="backToDifficultyBottomBtn">
+              ← Back
+            </button>
+
+            <!-- Custom Board Size (shown when custom mode selected) -->
+            <div class="board-size-selection hidden" id="boardSizeSelection">
+              <h4>Select Board Size</h4>
+              <div class="size-buttons">
+                <button class="size-btn active" data-rows="6" data-cols="7">
+                  6×7<small>Classic</small>
+                </button>
+                <button class="size-btn" data-rows="7" data-cols="7">
+                  7×7<small>Square</small>
+                </button>
+                <button class="size-btn" data-rows="8" data-cols="8">
+                  8×8<small>Large</small>
+                </button>
+                <button class="size-btn" data-rows="5" data-cols="6">
+                  5×6<small>Small</small>
+                </button>
+              </div>
+            </div>
+
+            <button class="start-game-btn" id="startGameBtn">Start Game</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Victory Modal -->
     <div class="victory-modal" id="victoryModal">
-        <div class="modal-content">
-            <button class="close-modal-btn" id="closeVictoryModal" title="Change Players">✕</button>
-            <div class="victory-icon" id="victoryIcon"></div>
-            <h2 class="victory-title" id="victoryTitle">STRAW HATS WIN!</h2>
-            <p class="victory-message" id="victoryMessage">We're gonna be King of the Pirates!</p>
-            <div class="victory-buttons">
-                <button class="play-again-btn" id="playAgainBtn">
-                    🔄 Play Again
-                </button>
-                <button class="change-players-btn" id="changePlayersBtn">
-                    🔀 Change Players
-                </button>
-            </div>
+      <div class="modal-content">
+        <button
+          class="close-modal-btn"
+          id="closeVictoryModal"
+          title="Change Players"
+        >
+          ✕
+        </button>
+        <div class="victory-icon" id="victoryIcon"></div>
+        <h2 class="victory-title" id="victoryTitle">STRAW HATS WIN!</h2>
+        <p class="victory-message" id="victoryMessage">
+          We're gonna be King of the Pirates!
+        </p>
+        <div class="victory-buttons">
+          <button class="play-again-btn" id="playAgainBtn">
+            🔄 Play Again
+          </button>
+          <button class="change-players-btn" id="changePlayersBtn">
+            🔀 Change Players
+          </button>
         </div>
+      </div>
     </div>
 
     <!-- Settings Panel -->
     <div class="settings-panel" id="settingsPanel">
-        <button class="settings-toggle" id="settingsToggle">⚙️</button>
-        <div class="settings-content hidden" id="settingsContent">
-            <h3>Settings</h3>
-
-            <!-- Theme Selection -->
-            <div class="setting-group">
-                <label>Theme</label>
-                <select id="themeSelector" class="theme-selector">
-                    <option value="onePiece">One Piece</option>
-                    <option value="naruto">Naruto</option>
-                    <option value="dragonBall">Dragon Ball</option>
-                    <option value="onePunchMan">One Punch Man</option>
-                    <option value="demonSlayer">Demon Slayer</option>
-                    <option value="attackOnTitan">Attack on Titan</option>
-                    <option value="pokemon">Pokemon</option>
-                    <option value="jujutsuKaisen">Jujutsu Kaisen</option>
-                    <option value="hunterXHunter">Hunter x Hunter</option>
-                    <option value="bleach">Bleach</option>
-                    <option value="berserk">Berserk</option>
-                </select>
-            </div>
-
-            <!-- Sound Controls -->
-            <div class="setting-group">
-                <label>Sounds</label>
-                <button class="toggle-btn" id="muteToggle">🔊 On</button>
-            </div>
-
-            <div class="setting-group">
-                <label>Volume</label>
-                <input type="range" id="volumeSlider" min="0" max="100" value="50">
-            </div>
+      <button class="settings-toggle" id="settingsToggle">⚙️</button>
+      <div class="settings-content hidden" id="settingsContent">
+        <div class="settings-header">
+          <h3>Settings</h3>
+          <button
+            class="settings-close-btn"
+            id="settingsCloseBtn"
+            title="Close Settings"
+          >
+            ✕
+          </button>
         </div>
-    </div>
 
-    <!-- Timer Display (for timed mode) -->
-    <div class="timer-display hidden" id="timerDisplay">
-        <span id="timerValue">30</span>s
-    </div>
+        <!-- Theme Selection -->
+        <div class="setting-group">
+          <label>Theme</label>
+          <select id="themeSelector" class="theme-selector">
+            <option value="onePiece">One Piece</option>
+            <option value="naruto">Naruto</option>
+            <option value="dragonBall">Dragon Ball</option>
+            <option value="onePunchMan">One Punch Man</option>
+            <option value="demonSlayer">Demon Slayer</option>
+            <option value="attackOnTitan">Attack on Titan</option>
+            <option value="pokemon">Pokemon</option>
+            <option value="jujutsuKaisen">Jujutsu Kaisen</option>
+            <option value="hunterXHunter">Hunter x Hunter</option>
+            <option value="bleach">Bleach</option>
+            <option value="berserk">Berserk</option>
+          </select>
+        </div>
 
-    <!-- AI Thinking Indicator -->
-    <div class="ai-thinking hidden" id="aiThinking">
-        <div class="thinking-spinner"></div>
-        <span>AI is thinking...</span>
+        <!-- Sound Controls -->
+        <div class="setting-group">
+          <label>Sounds</label>
+          <button class="toggle-btn" id="muteToggle">🔊 On</button>
+        </div>
+
+        <div class="setting-group">
+          <label>Volume</label>
+          <input type="range" id="volumeSlider" min="0" max="100" value="50" />
+        </div>
+      </div>
     </div>
 
     <!-- Include all JavaScript modules -->
@@ -301,6 +496,5 @@
     <script src="themeManager.js"></script>
     <script src="soundManager.js"></script>
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
