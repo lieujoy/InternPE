@@ -405,6 +405,34 @@ function resetGame() {
 function createBoard() {
   gameBoard.innerHTML = "";
 
+  // Calculate responsive cell size so board always fits the viewport.
+  // Available height accounts for header, controls (≈260px) and body padding.
+  // Available width accounts for side panels (≈600px) and body padding.
+  const availableHeight = window.innerHeight - 320;
+  const availableWidth = Math.min(window.innerWidth - 40, 760);
+  const gap = 10;
+  const boardPad = 36; // 18px padding × 2
+
+  const maxCellByHeight = Math.floor(
+    (availableHeight - boardPad - gap * (gameEngine.ROWS - 1)) /
+      gameEngine.ROWS,
+  );
+  const maxCellByWidth = Math.floor(
+    (availableWidth - boardPad - gap * (gameEngine.COLS - 1)) / gameEngine.COLS,
+  );
+
+  // Pick the smaller constraint, cap at 70px (default), floor at 44px
+  const cellSize = Math.max(44, Math.min(70, maxCellByHeight, maxCellByWidth));
+  const pieceSize = Math.round(cellSize * 0.88);
+
+  // Apply to CSS custom properties so all piece/cell styles inherit correctly
+  document.documentElement.style.setProperty("--cell-size", `${cellSize}px`);
+  document.documentElement.style.setProperty("--piece-size", `${pieceSize}px`);
+
+  // Set explicit grid dimensions
+  gameBoard.style.gridTemplateColumns = `repeat(${gameEngine.COLS}, var(--cell-size))`;
+  gameBoard.style.gridTemplateRows = `repeat(${gameEngine.ROWS}, var(--cell-size))`;
+
   for (let row = 0; row < gameEngine.ROWS; row++) {
     for (let col = 0; col < gameEngine.COLS; col++) {
       const cell = document.createElement("div");
@@ -426,100 +454,141 @@ function createBoard() {
 // GAME LOGIC
 // ===================================
 
-async function handleCellClick(row, col) {
-  // Bug 2 fix: block ALL input while AI is calculating, not just during animating
-  if (isAITurn) return;
+async function handleCellClick(clickedRow, col) {
+  // Block all input while AI is thinking or animation is playing
+  if (isAITurn || animating) return;
 
-  // Prevent clicks during animation, if game is over, or if AI is thinking
+  // Block if game is over or cell is already occupied
+  if (!gameEngine.gameActive || !gameEngine.isValidMove(clickedRow, col))
+    return;
+
+  // In AI mode, human only plays as pirate (player 1)
+  if (gameMode === "ai" && gameEngine.currentPlayer !== "pirate") return;
+
+  // Lock and execute human move
+  animating = true;
+  await makeMove(clickedRow, col, gameEngine.currentPlayer);
+
+  // After human move resolves, fire AI if it's now the AI's turn
+  if (
+    gameMode === "ai" &&
+    gameEngine.gameActive &&
+    gameEngine.currentPlayer === "marine"
+  ) {
+    await makeAIMove();
+  }
+}
+
+function makeMove(row, col, player) {
+  return new Promise((resolve) => {
+    try {
+      // In timed mode, stop clock while placing
+      if (selectedGameMode === "timed") stopTimer();
+
+      // Register move in engine
+      const moved = gameEngine.makeMove(row, col, player);
+      if (!moved) {
+        // Engine rejected the move (invalid) — release lock immediately
+        animating = false;
+        resolve();
+        return;
+      }
+
+      // Sound & render
+      try {
+        soundManager.playPieceDrop();
+      } catch (e) {
+        /* ignore sound errors */
+      }
+
+      // Render the piece in the correct cell
+      const cell = document.querySelector(
+        `[data-row="${row}"][data-col="${col}"].cell`,
+      );
+      if (cell) {
+        cell.classList.add("filled");
+        try {
+          animatePiecePlacement(row, col, player);
+        } catch (e) {
+          /* ignore animation errors */
+        }
+      }
+
+      // After animation delay, check win/draw and switch turns
+      // CRITICAL: wrapped in try-catch so resolve() ALWAYS fires.
+      // If this ever throws (e.g. handleWin, updatePlayerIndicator),
+      // the Promise hangs forever and isAITurn stays true, locking the game.
+      setTimeout(() => {
+        try {
+          const winInfo = gameEngine.checkWin(row, col);
+
+          if (winInfo) {
+            handleWin(winInfo);
+            animating = false;
+            resolve();
+            return;
+          }
+
+          if (gameEngine.isBoardFull()) {
+            handleDraw();
+            animating = false;
+            resolve();
+            return;
+          }
+
+          // Switch to next player and unlock
+          gameEngine.switchPlayer();
+          updatePlayerIndicator();
+          animating = false;
+
+          if (selectedGameMode === "timed") startTimer();
+        } catch (e) {
+          animating = false; // Always release even on internal error
+        } finally {
+          resolve(); // ALWAYS call resolve — never leave Promise hanging
+        }
+      }, 200);
+    } catch (e) {
+      // Outer guard: if anything before setTimeout throws, still resolve
+      animating = false;
+      resolve();
+    }
+  });
+}
+
+async function makeAIMove() {
+  // Guard: only proceed if it's genuinely the AI's turn
   if (
     !gameEngine.gameActive ||
-    animating ||
-    !gameEngine.isValidMove(row, col)
+    gameEngine.currentPlayer !== "marine" ||
+    isAITurn
   ) {
     return;
   }
 
-  // If it's AI's turn in AI mode, ignore human clicks
-  if (gameMode === "ai" && gameEngine.currentPlayer === "marine") {
-    return;
-  }
-
-  animating = true;
-  await makeMove(row, col, gameEngine.currentPlayer);
-}
-
-async function makeMove(row, col, player) {
-  // Stop timer if in timed mode
-  if (selectedGameMode === "timed") {
-    stopTimer();
-  }
-
-  // Make the move
-  gameEngine.makeMove(row, col, player);
-  soundManager.playPieceDrop();
-
-  // Update UI
-  const cell = document.querySelector(
-    `[data-row="${row}"][data-col="${col}"].cell`,
-  );
-  if (cell) {
-    cell.classList.add("filled");
-    animatePiecePlacement(row, col, player);
-  }
-
-  // Check for win after animation
-  setTimeout(async () => {
-    const winInfo = gameEngine.checkWin(row, col);
-
-    if (winInfo) {
-      handleWin(winInfo);
-    } else if (gameEngine.isBoardFull()) {
-      handleDraw();
-    } else {
-      gameEngine.switchPlayer();
-      updatePlayerIndicator();
-      animating = false;
-
-      // Start timer for next player if in timed mode
-      if (selectedGameMode === "timed") {
-        startTimer();
-      }
-
-      // Trigger AI move if it's AI's turn
-      if (gameMode === "ai" && gameEngine.currentPlayer === "marine") {
-        await makeAIMove();
-      }
-    }
-  }, 400);
-}
-
-async function makeAIMove() {
-  if (!gameEngine.gameActive) return;
-
-  animating = true;
   isAITurn = true;
+  animating = true;
   aiThinking.classList.remove("hidden");
   document.body.style.cursor = "wait";
 
   try {
     const move = await aiPlayer.makeMove(gameEngine, "marine", true);
 
-    if (move && move.row !== null && move.col !== null) {
+    if (move && typeof move.row === "number" && typeof move.col === "number") {
       await makeMove(move.row, move.col, "marine");
 
-      // Show explanation toast if AI provided one (Easy mode)
       const explanation = aiPlayer.lastMoveExplanation;
-      if (explanation) {
-        showAIExplanation(explanation);
-      }
+      if (explanation) showAIExplanation(explanation);
     }
-  } catch (error) {
-    console.error("AI move error:", error);
-    animating = false;
+    // If no valid move returned, the board must be full — game ends naturally
+  } catch (err) {
+    // Swallow error silently in production
   } finally {
+    // ALWAYS release locks — even on error
     aiThinking.classList.add("hidden");
     document.body.style.cursor = "";
     isAITurn = false;
+    animating = false;
   }
 }
 
@@ -605,10 +674,11 @@ function animatePiecePlacement(row, col, player) {
     piece.appendChild(icon);
 
     cell.appendChild(piece);
+    piece.style.transform = "translateY(0%)"; // Force final state immediately
 
     setTimeout(() => {
       createLandingParticles(cell, player);
-    }, 150);
+    }, 50); // Faster particles since there's no drop delay
   }
 }
 

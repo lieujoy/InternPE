@@ -81,6 +81,18 @@ class GameEngine {
     return validCols;
   }
 
+  getValidCells() {
+    const validCells = [];
+    for (let row = 0; row < this.ROWS; row++) {
+      for (let col = 0; col < this.COLS; col++) {
+        if (this.board[row][col] === null) {
+          validCells.push({ row, col });
+        }
+      }
+    }
+    return validCells;
+  }
+
   checkWin(row, col) {
     const player = this.board[row][col];
     if (!player) return null;
@@ -164,7 +176,12 @@ class GameEngine {
   }
 
   isBoardFull() {
-    return this.board[0].every((cell) => cell !== null);
+    for (let r = 0; r < this.ROWS; r++) {
+      for (let c = 0; c < this.COLS; c++) {
+        if (this.board[r][c] === null) return false;
+      }
+    }
+    return true;
   }
 
   // Get a copy of the board for AI analysis

@@ -1,17 +1,26 @@
 // ===================================
-// AI PLAYER — MINIMAX
+// AI PLAYER — FREE CELL MINIMAX
+// Places pieces on any empty cell (no gravity).
 // ===================================
 
 class AIPlayer {
   constructor(difficulty = "medium") {
     this.difficulty = difficulty;
-    this.lastMoveExplanation = ""; // For Easy mode: why did AI make this move?
-    this.transpositionTable = new Map(); // Bug fix: cache seen states for Extreme
+    this.lastMoveExplanation = "";
+    this.transpositionTable = new Map();
+    // Depth limits tuned for 42-cell branching factor with alpha-beta pruning
     this.depthLimits = {
-      easy: 1,
-      medium: 4, // Improved: was 3
-      hard: 7, // Improved: was 6
-      extreme: 12, // New: perfect play, never loses
+      easy: 0, // Pure random — instant response
+      medium: 2, // ~1764 nodes max with pruning
+      hard: 3, // ~74k nodes max with pruning
+      extreme: 4, // ~3M nodes max with pruning + time cap
+    };
+    // Hard time caps so the UI never freezes
+    this.timeLimits = {
+      easy: 50,
+      medium: 250,
+      hard: 800,
+      extreme: 2000,
     };
   }
 
@@ -20,110 +29,33 @@ class AIPlayer {
     this.transpositionTable.clear();
   }
 
-  /** Find the move that threatens the most offensive 3-in-a-row sequences */
-  getBestOffensiveMove(gameEngine, player) {
-    const validCols = gameEngine.getValidColumns();
-    let bestScore = -1;
-    let bestMove = null;
-
-    for (const col of validCols) {
-      const row = gameEngine.getLowestEmptyRow(col);
-      gameEngine.makeMove(row, col, player);
-
-      // Check immediate win first
-      const win = gameEngine.checkWin(row, col);
-      if (win) {
-        gameEngine.undoMove();
-        return { row, col, score: Infinity };
-      }
-
-      const score = gameEngine.evaluateBoard(player);
-      gameEngine.undoMove();
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestMove = { row, col, score };
-      }
-    }
-    return bestMove;
-  }
-
-  /** Find a move that immediately blocks an opponent 3-in-a-row / win threat */
-  getImmediateBlockMove(gameEngine, player) {
-    const opponent = player === "pirate" ? "marine" : "pirate";
-    const validCols = gameEngine.getValidColumns();
-
-    for (const col of validCols) {
-      const row = gameEngine.getLowestEmptyRow(col);
-      // Temporarily place opponent piece to see if they'd win
-      gameEngine.makeMove(row, col, opponent);
-      const win = gameEngine.checkWin(row, col);
-      gameEngine.undoMove();
-
-      if (win) {
-        return { row, col, score: 999 };
-      }
-    }
-    return null;
-  }
-
   // ===================================
-  // MAIN MOVE SELECTION
+  // MAIN ENTRY POINT
   // ===================================
 
   getBestMove(gameEngine, player) {
     this.lastMoveExplanation = "";
+    const validCells = gameEngine.getValidCells();
+
+    if (validCells.length === 0) return null;
 
     if (this.difficulty === "easy") {
-      return this.getEasyMove(gameEngine, player);
+      return this._easyMove(gameEngine, player, validCells);
     }
 
     this.transpositionTable.clear();
-    const depth = this.depthLimits[this.difficulty] || this.depthLimits.medium;
-    const opponent = player === "pirate" ? "marine" : "pirate";
-
-    // Column order: prefer centre columns for better heuristics
-    const validCols = this.orderColumns(gameEngine);
-
-    let bestScore = -Infinity;
-    let bestCol = null;
-    let bestRow = null;
-
-    for (const col of validCols) {
-      const row = gameEngine.getLowestEmptyRow(col);
-      gameEngine.makeMove(row, col, player);
-      const score = this.minimax(
-        gameEngine,
-        depth - 1,
-        -Infinity,
-        Infinity,
-        false,
-        player,
-        opponent,
-      );
-      gameEngine.undoMove();
-
-      if (score > bestScore) {
-        bestScore = score;
-        bestCol = col;
-        bestRow = row;
-      }
-    }
-
-    return { row: bestRow, col: bestCol, score: bestScore };
+    return this._minimaxMove(gameEngine, player, validCells);
   }
 
   // ===================================
-  // EASY MODE — with move explanation
+  // EASY MODE — smart-random (no minimax)
   // ===================================
 
-  getEasyMove(gameEngine, player) {
+  _easyMove(gameEngine, player, validCells) {
     const opponent = player === "pirate" ? "marine" : "pirate";
-    const validCols = gameEngine.getValidColumns();
 
-    // 1. Win immediately if possible
-    for (const col of validCols) {
-      const row = gameEngine.getLowestEmptyRow(col);
+    // 1. Always take an immediate win
+    for (const { row, col } of validCells) {
       gameEngine.makeMove(row, col, player);
       const win = gameEngine.checkWin(row, col);
       gameEngine.undoMove();
@@ -133,10 +65,9 @@ class AIPlayer {
       }
     }
 
-    // 2. Block opponent's immediate win (~50% chance — keeps easy feeling beatable)
+    // 2. 50% chance to block opponent's immediate win
     if (Math.random() < 0.5) {
-      for (const col of validCols) {
-        const row = gameEngine.getLowestEmptyRow(col);
+      for (const { row, col } of validCells) {
         gameEngine.makeMove(row, col, opponent);
         const win = gameEngine.checkWin(row, col);
         gameEngine.undoMove();
@@ -147,52 +78,109 @@ class AIPlayer {
       }
     }
 
-    // 3. Otherwise random
-    return this.getRandomMove(gameEngine);
+    // 3. Pure random from all valid cells — guaranteed non-null
+    const pick = validCells[Math.floor(Math.random() * validCells.length)];
+    this.lastMoveExplanation = "🎲 AI made a random move!";
+    return { row: pick.row, col: pick.col };
   }
 
   // ===================================
-  // MINIMAX WITH ALPHA-BETA + TRANSPOSITION TABLE
+  // MEDIUM / HARD / EXTREME — minimax
   // ===================================
 
-  minimax(gameEngine, depth, alpha, beta, isMaximizing, player, opponent) {
+  _minimaxMove(gameEngine, player, validCells) {
+    const opponent = player === "pirate" ? "marine" : "pirate";
+    const depth = this.depthLimits[this.difficulty];
+    const ordered = this._orderCells(validCells, gameEngine);
+
+    let bestScore = -Infinity;
+    let bestMove = ordered[0]; // Safe default — never null
+    const startTime = Date.now();
+    const timeLimit = this.timeLimits[this.difficulty];
+
+    for (const { row, col } of ordered) {
+      if (Date.now() - startTime > timeLimit) break; // Time escape
+
+      gameEngine.makeMove(row, col, player);
+      const score = this._minimax(
+        gameEngine,
+        depth - 1,
+        -Infinity,
+        Infinity,
+        false,
+        player,
+        opponent,
+        startTime,
+        timeLimit,
+      );
+      gameEngine.undoMove();
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = { row, col };
+      }
+    }
+
+    return bestMove;
+  }
+
+  // ===================================
+  // MINIMAX WITH ALPHA-BETA + TRANSPOSITION + TIME ESCAPE
+  // ===================================
+
+  _minimax(
+    gameEngine,
+    depth,
+    alpha,
+    beta,
+    isMaximizing,
+    player,
+    opponent,
+    startTime,
+    timeLimit,
+  ) {
+    // Time escape — return heuristic if we've been thinking too long
+    if (Date.now() - startTime > timeLimit) {
+      return gameEngine.evaluateBoard(player);
+    }
+
     // Transposition table lookup
-    const key = this.boardKey(gameEngine, isMaximizing);
+    const key = this._boardKey(gameEngine, isMaximizing);
     const cached = this.transpositionTable.get(key);
     if (cached !== undefined && cached.depth >= depth) {
       return cached.score;
     }
 
-    // Terminal state checks
-    const lastMove = gameEngine.moveHistory[gameEngine.moveHistory.length - 1];
-    if (lastMove) {
-      const winInfo = gameEngine.checkWin(lastMove.row, lastMove.col);
-      if (winInfo) {
+    // Terminal checks
+    const last = gameEngine.moveHistory[gameEngine.moveHistory.length - 1];
+    if (last) {
+      const win = gameEngine.checkWin(last.row, last.col);
+      if (win) {
         const score =
-          winInfo.player === player
-            ? 1000000 + depth // Prefer faster wins
-            : -1000000 - depth; // Prefer slower losses
+          win.player === player ? 1000000 + depth : -1000000 - depth;
         this.transpositionTable.set(key, { score, depth });
         return score;
       }
     }
 
     if (gameEngine.isBoardFull()) return 0;
+
     if (depth === 0) {
       const score = gameEngine.evaluateBoard(player);
       this.transpositionTable.set(key, { score, depth });
       return score;
     }
 
-    const validCols = this.orderColumns(gameEngine);
+    const validCells = gameEngine.getValidCells();
+    const ordered = this._orderCells(validCells, gameEngine);
     let result;
 
     if (isMaximizing) {
       let maxScore = -Infinity;
-      for (const col of validCols) {
-        const row = gameEngine.getLowestEmptyRow(col);
+      for (const { row, col } of ordered) {
+        if (Date.now() - startTime > timeLimit) break;
         gameEngine.makeMove(row, col, player);
-        const score = this.minimax(
+        const score = this._minimax(
           gameEngine,
           depth - 1,
           alpha,
@@ -200,19 +188,21 @@ class AIPlayer {
           false,
           player,
           opponent,
+          startTime,
+          timeLimit,
         );
         gameEngine.undoMove();
         maxScore = Math.max(maxScore, score);
         alpha = Math.max(alpha, score);
-        if (beta <= alpha) break;
+        if (beta <= alpha) break; // Alpha-beta cut
       }
       result = maxScore;
     } else {
       let minScore = Infinity;
-      for (const col of validCols) {
-        const row = gameEngine.getLowestEmptyRow(col);
+      for (const { row, col } of ordered) {
+        if (Date.now() - startTime > timeLimit) break;
         gameEngine.makeMove(row, col, opponent);
-        const score = this.minimax(
+        const score = this._minimax(
           gameEngine,
           depth - 1,
           alpha,
@@ -220,11 +210,13 @@ class AIPlayer {
           true,
           player,
           opponent,
+          startTime,
+          timeLimit,
         );
         gameEngine.undoMove();
         minScore = Math.min(minScore, score);
         beta = Math.min(beta, score);
-        if (beta <= alpha) break;
+        if (beta <= alpha) break; // Alpha-beta cut
       }
       result = minScore;
     }
@@ -237,90 +229,94 @@ class AIPlayer {
   // HINT SYSTEM
   // ===================================
 
-  /**
-   * Returns the best move for the CURRENT player (used for Hint button).
-   * Runs a medium-depth minimax regardless of selected difficulty,
-   * so hints are always high quality but not slow.
-   */
   getHint(gameEngine, player) {
     const opponent = player === "pirate" ? "marine" : "pirate";
-    const depth = 5; // Fixed depth for hints — fast and smart
-    const validCols = this.orderColumns(gameEngine);
+    const validCells = gameEngine.getValidCells();
+    if (validCells.length === 0) return null;
 
-    let bestScore = -Infinity;
-    let bestCol = null;
-    let bestRow = null;
+    const ordered = this._orderCells(validCells, gameEngine);
+    const startTime = Date.now();
+    const timeLimit = 400;
 
     this.transpositionTable.clear();
 
-    for (const col of validCols) {
-      const row = gameEngine.getLowestEmptyRow(col);
+    let bestScore = -Infinity;
+    let bestMove = ordered[0];
+
+    for (const { row, col } of ordered) {
+      if (Date.now() - startTime > timeLimit) break;
       gameEngine.makeMove(row, col, player);
-      const score = this.minimax(
+      const score = this._minimax(
         gameEngine,
-        depth - 1,
+        1,
         -Infinity,
         Infinity,
         false,
         player,
         opponent,
+        startTime,
+        timeLimit,
       );
       gameEngine.undoMove();
-
       if (score > bestScore) {
         bestScore = score;
-        bestCol = col;
-        bestRow = row;
+        bestMove = { row, col };
       }
     }
 
     this.transpositionTable.clear();
-    return { row: bestRow, col: bestCol, score: bestScore };
+    return bestMove;
   }
 
   // ===================================
   // HELPERS
   // ===================================
 
-  /** Order columns center-first for better alpha-beta pruning */
-  orderColumns(gameEngine) {
-    const cols = gameEngine.getValidColumns();
-    const center = Math.floor(gameEngine.COLS / 2);
-    return cols.sort((a, b) => Math.abs(a - center) - Math.abs(b - center));
+  /** Sort cells closest to center first — improves alpha-beta pruning dramatically */
+  _orderCells(cells, gameEngine) {
+    const centerRow = (gameEngine.ROWS - 1) / 2;
+    const centerCol = (gameEngine.COLS - 1) / 2;
+    return [...cells].sort((a, b) => {
+      const distA = Math.abs(a.row - centerRow) + Math.abs(a.col - centerCol);
+      const distB = Math.abs(b.row - centerRow) + Math.abs(b.col - centerCol);
+      return distA - distB;
+    });
   }
 
-  getRandomMove(gameEngine) {
-    const validCols = gameEngine.getValidColumns();
-    const randomCol = validCols[Math.floor(Math.random() * validCols.length)];
-    const randomRow = gameEngine.getLowestEmptyRow(randomCol);
-    return { row: randomRow, col: randomCol };
-  }
-
-  /** Light board fingerprint for transposition table — column heights only */
-  boardKey(gameEngine, isMaximizing) {
-    const heights = [];
-    for (let c = 0; c < gameEngine.COLS; c++) {
-      let h = 0;
-      for (let r = 0; r < gameEngine.ROWS; r++) {
-        if (gameEngine.board[r][c] !== null) h++;
+  /** Full board state fingerprint for transposition table */
+  _boardKey(gameEngine, isMaximizing) {
+    let key = "";
+    for (let r = 0; r < gameEngine.ROWS; r++) {
+      for (let c = 0; c < gameEngine.COLS; c++) {
+        const p = gameEngine.board[r][c];
+        key += p === "pirate" ? "P" : p === "marine" ? "M" : ".";
       }
-      heights.push(`${gameEngine.board.map((row) => row[c] || ".").join("")}`);
     }
-    return heights.join("|") + (isMaximizing ? "+" : "-");
+    return key + (isMaximizing ? "+" : "-");
   }
 
-  // Simulate AI "thinking" time for UX
+  // Simulate thinking time for UX realism
   async makeMove(gameEngine, player, showThinking = true) {
     if (showThinking) {
       const thinkingTime =
         {
-          easy: 400,
-          medium: 700,
-          hard: 1100,
-          extreme: 1500,
-        }[this.difficulty] || 700;
+          easy: 200,
+          medium: 500,
+          hard: 800,
+          extreme: 1000,
+        }[this.difficulty] || 500;
       await new Promise((resolve) => setTimeout(resolve, thinkingTime));
     }
-    return this.getBestMove(gameEngine, player);
+
+    // CRITICAL: Save currentPlayer before evaluation.
+    // undoMove() mutates currentPlayer as a side-effect. If the AI's
+    // evaluation loops (e.g. blocking-check) end on an opponent undo,
+    // currentPlayer is left pointing at the opponent. This causes the
+    // subsequent real switchPlayer() call to flip the wrong direction,
+    // permanently locking out human clicks.
+    const savedCurrentPlayer = gameEngine.currentPlayer;
+    const move = this.getBestMove(gameEngine, player);
+    gameEngine.currentPlayer = savedCurrentPlayer; // restore — must always run
+    return move;
   }
 }
