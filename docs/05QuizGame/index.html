@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brainrot Quiz 🫠</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫠</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+
+  <main id="app" class="space-theme">
+
+    <!-- ── HEADER ── -->
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-icon">🫠</span>
+        <div>
+          <h1 class="logo-title">Brainrot Quiz</h1>
+          <p class="logo-sub">Your brain called. It wants a rematch.</p>
+        </div>
+      </div>
+      <div class="top-widgets">
+        <div class="select-wrap">
+          <label class="select-label" for="categorySelect">Category</label>
+          <select id="categorySelect"></select>
+        </div>
+        <div class="select-wrap">
+          <label class="select-label" for="modeSelect">Mode</label>
+          <select id="modeSelect">
+            <option value="classic">Classic 🎯</option>
+            <option value="timed">Timed ⚡ (60s)</option>
+            <option value="survival">Survival 💀</option>
+          </select>
+        </div>
+        <button id="startBtn" class="btn btn-launch">
+          <span>🚀</span> Let's Go
+        </button>
+      </div>
+    </header>
+
+    <!-- ── HUD ── -->
+    <section class="hud">
+      <div class="hud-item">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="score">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Streak</span>
+        <span class="hud-value" id="streak">0</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Time Left</span>
+        <span class="hud-value" id="timer">--</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Question</span>
+        <span class="hud-value"><span id="currentIndex">1</span> / <span id="totalQuestions">10</span></span>
+      </div>
+    </section>
+
+    <!-- ── PROGRESS BAR ── -->
+    <div class="progress-track" id="progressTrack" style="display:none">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- ── LIFELINES BAR ── -->
+    <div class="lifelines-bar hidden" id="lifelinesBar">
+      <span class="lifeline-label">Lifelines:</span>
+      <button class="lifeline-btn" id="ll-fifty" title="50/50 — Removes 2 wrong answers">
+        <span class="ll-icon">✂️</span><span class="ll-name">50/50</span>
+      </button>
+      <button class="lifeline-btn" id="ll-change" title="Skip — Swap this question for a new one">
+        <span class="ll-icon">🔄</span><span class="ll-name">Skip</span>
+      </button>
+      <button class="lifeline-btn" id="ll-doubledip" title="Double Dip — Get 2 chances to answer">
+        <span class="ll-icon">🎯</span><span class="ll-name">Double Dip</span>
+      </button>
+      <span class="lifeline-info" id="lifelineInfo"></span>
+    </div>
+
+    <!-- ── QUESTION BOARD ── -->
+    <section class="question-board">
+      <div class="planet-glow" aria-hidden="true"></div>
+
+      <!-- Welcome screen -->
+      <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-inner">
+          <div class="welcome-icon">🫠</div>
+          <h2 class="welcome-title">Brainrot Quiz</h2>
+          <p class="welcome-desc">Pick a category &amp; mode up top, then hit <strong>Let's Go</strong>. Lifelines unlock in <strong>Timed ⚡</strong> and <strong>Survival 💀</strong>. Press <kbd>1</kbd>–<kbd>4</kbd> to answer.</p>
+          <button id="welcomeStartBtn" class="btn btn-launch btn-big-start">
+            <span>🚀</span> Let's Go
+          </button>
+        </div>
+      </div>
+
+      <!-- Mid-game warning -->
+      <div id="midGameWarning" class="mid-game-warning hidden">
+        <div class="mgw-inner">
+          <div class="mgw-icon">⚠️</div>
+          <p class="mgw-text">A quiz is already in progress. Abandon it and start fresh?</p>
+          <div class="mgw-actions">
+            <button id="mgwConfirm" class="btn btn-launch">🔥 Start New</button>
+            <button id="mgwCancel" class="btn btn-outline">↩ Keep Playing</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question card -->
+      <article id="questionCard" class="card hidden">
+        <div class="card-header">
+          <span id="categoryBadge" class="category-badge">Category</span>
+          <span id="diffBadge" class="diff-badge">Medium</span>
+          <span class="tagline" id="tagline">No cap, pick the right one</span>
+        </div>
+        <h2 id="questionText" class="question-text">Loading...</h2>
+        <div id="options" class="options-grid"></div>
+        <div class="hint-box">
+          <span class="hint-icon">💡</span>
+          <span id="hintText">Hint will appear here.</span>
+        </div>
+        <div id="funFactBox" class="fun-fact-box hidden">
+          <span class="ff-icon">🧠</span>
+          <span id="funFactText"></span>
+        </div>
+        <div id="doubleDipNotice" class="double-dip-notice hidden">
+          🎯 <strong>Double Dip active</strong> — first pick was wrong, try again!
+        </div>
+      </article>
+    </section>
+
+    <!-- ── BOTTOM PANELS ── -->
+    <section class="special-features">
+      <div class="feature-card">
+        <h3 class="feature-title">🏅 Achievements</h3>
+        <ul id="achievementsList" class="achievements">
+          <li class="empty-msg">Slay a round to unlock achievements.</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <h3 class="feature-title">🏆 High Scores</h3>
+        <ol id="leaderboard" class="leaderboard">
+          <li class="empty-msg">No scores yet. Be the first.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── COMPLETION MODAL ── -->
+    <div id="completionModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-content">
+        <div class="modal-icon" id="modalIcon">🫠</div>
+        <h2 id="modalTitle" class="modal-title">Results</h2>
+        <p id="modalSummary" class="modal-summary">You ate that fr fr.</p>
+        <div class="modal-stats">
+          <div class="stat-box">
+            <span class="stat-label">Final Score</span>
+            <span class="stat-value" id="finalScore">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="accuracy">0%</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Best Streak</span>
+            <span class="stat-value" id="bestStreak">0</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Correct</span>
+            <span class="stat-value" id="correctCount">0/0</span>
+          </div>
+        </div>
+        <div id="gradeDisplay" class="grade-display hidden"></div>
+        <div id="medalDisplay" class="medal-display"></div>
+        <div class="modal-actions">
+          <button id="retryBtn" class="btn btn-launch">🔄 Run It Back</button>
+          <button id="closeModalBtn" class="btn btn-outline">✕ Close</button>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+  </main>
+
+  <footer class="project-footer">
+    <p>Brainrot Quiz</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

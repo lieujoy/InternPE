@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duel ⚔️</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚔️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main id="app">
+
+    <!-- ── HEADER ── -->
+    <header class="topbar">
+      <div class="logo">
+        <span class="logo-icon">⚔️</span>
+        <div>
+          <h1 class="logo-title">Duel</h1>
+          <p class="logo-sub">You vs the machine. One throw at a time.</p>
+        </div>
+      </div>
+      <div class="top-widgets">
+        <div class="select-wrap">
+          <label class="select-label" for="diffSelect">AI Level</label>
+          <select id="diffSelect">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+            <option value="unbeatable">Unbeatable</option>
+          </select>
+        </div>
+        <div class="select-wrap">
+          <label class="select-label" for="roundsSelect">Series</label>
+          <select id="roundsSelect">
+            <option value="3">Best of 3</option>
+            <option value="5" selected>Best of 5</option>
+            <option value="7">Best of 7</option>
+            <option value="0">Endless</option>
+          </select>
+        </div>
+        <button id="newGameBtn" class="btn btn-primary">New Game</button>
+      </div>
+    </header>
+
+    <!-- ── SCOREBOARD ── -->
+    <section class="scoreboard">
+      <div class="score-side you-side">
+        <span class="side-tag you-tag">YOU</span>
+        <span class="side-score" id="p1Score">0</span>
+        <div class="hp-track"><div class="hp-bar you-hp" id="youHp"></div></div>
+      </div>
+      <div class="score-mid">
+        <div class="round-chip">
+          <span class="rc-label">Round</span>
+          <span class="rc-num" id="roundNum">1</span>
+        </div>
+        <span class="vs-badge">VS</span>
+        <span class="series-tag" id="seriesPill">Best of 5</span>
+      </div>
+      <div class="score-side ai-side">
+        <span class="side-tag ai-tag">AI</span>
+        <span class="side-score" id="p2Score">0</span>
+        <div class="hp-track"><div class="hp-bar ai-hp" id="aiHp"></div></div>
+      </div>
+    </section>
+
+    <!-- ── ARENA ── -->
+    <section class="arena">
+
+      <!-- Welcome screen -->
+      <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-inner">
+          <!-- Left: branding -->
+          <div class="welcome-left">
+            <div class="welcome-icon">⚔️</div>
+            <h2 class="welcome-title">Duel</h2>
+            <p class="welcome-sub">The AI is reading your every move.</p>
+            <p class="welcome-desc">Pick a difficulty, pick a series, and step into the arena. It learns your patterns in real time — no mercy.</p>
+            <button id="welcomeStartBtn" class="btn btn-primary btn-big">Enter the Arena</button>
+          </div>
+          <!-- Divider -->
+          <div class="welcome-divider"></div>
+          <!-- Right: move preview + hint -->
+          <div class="welcome-right">
+            <div class="welcome-moves">
+              <div class="wm-card rock-card">
+                <span class="wm-emoji">🪨</span>
+                <span class="wm-name">Rock</span>
+                <span class="wm-beats">beats Scissors</span>
+              </div>
+              <div class="wm-card paper-card">
+                <span class="wm-emoji">📄</span>
+                <span class="wm-name">Paper</span>
+                <span class="wm-beats">beats Rock</span>
+              </div>
+              <div class="wm-card sci-card">
+                <span class="wm-emoji">✂️</span>
+                <span class="wm-name">Scissors</span>
+                <span class="wm-beats">beats Paper</span>
+              </div>
+            </div>
+            <div class="welcome-hint">
+              Keyboard shortcuts — <kbd>1</kbd> Rock &nbsp;·&nbsp; <kbd>2</kbd> Paper &nbsp;·&nbsp; <kbd>3</kbd> Scissors
+            </div>
+            <div class="welcome-hint">
+              AI difficulty scales from random throws to full pattern prediction. On <strong style="color:var(--amber)">Unbeatable</strong>, it counters your most-used move 72% of the time.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Battle screen -->
+      <div id="battleScreen" class="battle-screen hidden">
+
+        <!-- AI read bar -->
+        <div class="read-bar">
+          <span class="rb-label">AI predicts your next throw</span>
+          <div class="rb-pills">
+            <span class="rb-pill" id="mrRock">🪨 <b id="mrRockPct">33%</b></span>
+            <span class="rb-pill" id="mrPaper">📄 <b id="mrPaperPct">33%</b></span>
+            <span class="rb-pill" id="mrScissors">✂️ <b id="mrScissorsPct">34%</b></span>
+          </div>
+        </div>
+
+        <!-- Clash zone -->
+        <div class="clash-zone">
+          <div class="clash-card" id="yourCard">
+            <span class="cc-tag">Your throw</span>
+            <span class="cc-emoji" id="yourSymbol">?</span>
+            <span class="cc-name" id="yourName">—</span>
+          </div>
+          <div class="clash-center">
+            <span class="clash-fx" id="clashBurst">⚔️</span>
+            <div class="round-verdict hidden" id="roundResult"></div>
+          </div>
+          <div class="clash-card" id="aiCard">
+            <span class="cc-tag">AI throws</span>
+            <span class="cc-emoji" id="aiSymbol">?</span>
+            <span class="cc-name" id="aiName">—</span>
+          </div>
+        </div>
+
+        <!-- Throw buttons -->
+        <div class="throw-row" id="throwZone">
+          <button class="throw-btn rock-btn" data-move="rock">
+            <span class="tb-emoji">🪨</span>
+            <span class="tb-name">Rock</span>
+            <kbd class="tb-key">1</kbd>
+          </button>
+          <button class="throw-btn paper-btn" data-move="paper">
+            <span class="tb-emoji">📄</span>
+            <span class="tb-name">Paper</span>
+            <kbd class="tb-key">2</kbd>
+          </button>
+          <button class="throw-btn scissors-btn" data-move="scissors">
+            <span class="tb-emoji">✂️</span>
+            <span class="tb-name">Scissors</span>
+            <kbd class="tb-key">3</kbd>
+          </button>
+        </div>
+
+        <!-- Streak -->
+        <div class="streak-bar">
+          <span class="sb-label">Streak</span>
+          <span class="sb-val" id="streakVal">0</span>
+          <span class="sb-fire" id="streakFire"></span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── BOTTOM PANELS ── -->
+    <section class="bottom-panels">
+      <div class="panel-card">
+        <h3 class="panel-title">Round Log</h3>
+        <div id="historyList" class="history-list">
+          <p class="empty-msg">No rounds yet.</p>
+        </div>
+      </div>
+      <div class="panel-card">
+        <h3 class="panel-title">Achievements</h3>
+        <ul id="achievementsList" class="ach-list">
+          <li class="empty-msg">Win rounds to unlock.</li>
+        </ul>
+      </div>
+      <div class="panel-card">
+        <h3 class="panel-title">Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-item"><span class="stat-lbl">Wins</span><span class="stat-val" id="statWins">0</span></div>
+          <div class="stat-item"><span class="stat-lbl">Losses</span><span class="stat-val" id="statLosses">0</span></div>
+          <div class="stat-item"><span class="stat-lbl">Draws</span><span class="stat-val" id="statDraws">0</span></div>
+          <div class="stat-item"><span class="stat-lbl">Win Rate</span><span class="stat-val" id="statWinRate">0%</span></div>
+          <div class="stat-item"><span class="stat-lbl">Best Streak</span><span class="stat-val" id="statStreak">0</span></div>
+          <div class="stat-item"><span class="stat-lbl">Fav Move</span><span class="stat-val" id="statFav">—</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MATCH MODAL ── -->
+    <div id="matchModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-box">
+        <div class="modal-icon" id="matchIcon">🏆</div>
+        <h2 class="modal-title" id="matchTitle">Match Over</h2>
+        <p class="modal-summary" id="matchSummary">GG!</p>
+        <div class="modal-stats">
+          <div class="stat-box"><span class="stat-label">Your Wins</span><span class="stat-value" id="mP1">0</span></div>
+          <div class="stat-box"><span class="stat-label">AI Wins</span><span class="stat-value" id="mP2">0</span></div>
+          <div class="stat-box"><span class="stat-label">Draws</span><span class="stat-value" id="mDraws">0</span></div>
+          <div class="stat-box"><span class="stat-label">Rounds</span><span class="stat-value" id="mRounds">0</span></div>
+        </div>
+        <div id="matchGrade" class="grade-display"></div>
+        <div class="modal-actions">
+          <button id="rematchBtn" class="btn btn-primary">Run It Back</button>
+          <button id="closeMatchBtn" class="btn btn-ghost">I'm Done</button>
+        </div>
+      </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+  </main>
+
+  <footer class="project-footer"><p>Duel</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>

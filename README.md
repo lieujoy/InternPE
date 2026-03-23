@@ -1,8 +1,8 @@
 ﻿# 🎓 InternPE - Web Development Projects Portfolio
 
-> **Three Professional Web Applications Showcasing Modern Development Skills**
+> **Six Professional Web Applications Showcasing Modern Development Skills**
 
-Welcome to my InternPE internship portfolio! This repository contains three progressively complex web development projects demonstrating HTML, CSS, and JavaScript expertise.
+Welcome to my InternPE internship portfolio! This repository contains six progressively complex web development projects demonstrating HTML, CSS, and JavaScript expertise.
 
 ## 🌐 Live Demos
 
@@ -12,6 +12,8 @@ Welcome to my InternPE internship portfolio! This repository contains three prog
 | **TEN VAULT Store**            | [https://lieujoy.github.io/InternPE/02TenVault/](https://lieujoy.github.io/InternPE/02TenVault/)       | ✅ Live |
 | **JUST DO IT Todo**            | [https://lieujoy.github.io/InternPE/03JustDoIT/](https://lieujoy.github.io/InternPE/03JustDoIT/)       | ✅ Live |
 | **Connect Four Anime Edition** | [https://lieujoy.github.io/InternPE/04ConnectFour/](https://lieujoy.github.io/InternPE/04ConnectFour/) | ✅ Live |
+| **Brainrot Quiz**              | [https://lieujoy.github.io/InternPE/05QuizGame/](https://lieujoy.github.io/InternPE/05QuizGame/)       | ✅ Live |
+| **Duel ⚔️ (RPS)**              | [https://lieujoy.github.io/InternPE/06RockPaperScissors/](https://lieujoy.github.io/InternPE/06RockPaperScissors/) | ✅ Live |
 
 ---
 
@@ -180,19 +182,86 @@ Experience the classic Connect Four game reimagined with **11 immersive anime th
 
 ---
 
+### 5. 🫠 Brainrot Quiz
+
+**Location**: [`docs/05QuizGame/`](docs/05QuizGame/)  
+**Live Demo**: [https://lieujoy.github.io/InternPE/05QuizGame/](https://lieujoy.github.io/InternPE/05QuizGame/)
+
+A full-featured trivia quiz game with a dark space UI, 11 categories, 3 game modes, lifelines, a letter grade system, fun facts, achievements, and a persistent leaderboard. The name is a double meaning — Gen-Z slang for obsessive content + your brain rotting from not studying.
+
+#### Key Features
+
+- 🧠 **55 questions** across 11 categories (Astronomy, Physics, Biology, History, Geography, Technology, Mathematics, and more)
+- 🎮 **3 game modes** — Classic (no timer), Timed ⚡ (60s), Survival 💀 (1 wrong = game over)
+- 🃏 **3 lifelines** (Timed & Survival only) — ✂️ 50/50, 🔄 Skip, 🎯 Double Dip
+- 📊 **Letter grade on results** — A+ to F with animated reveal and Gen-Z labels
+- 🧪 **"Did You Know?" fun facts** — a curated fact appears after every correct answer
+- 💀 **Mission Failed** — triggered when accuracy < 33%
+- 🏅 **10 achievements** — unlockable badges based on streaks, score, and accuracy
+- 🏆 **Leaderboard** — top 5 scores saved in `localStorage`
+- ⚠️ **Mid-game warning** — confirms before abandoning an active quiz
+- ⌨️ **Keyboard shortcuts** — press `1`–`4` to answer
+- 🎊 **Confetti** — fires on score ≥ 200
+
+#### Tech Stack
+
+- **Frontend**: HTML5, CSS3 (`clamp()`, custom properties, keyframe animations)
+- **Logic**: Vanilla JavaScript ES6+ — zero dependencies
+- **Storage**: `localStorage` for leaderboard persistence
+
+#### Highlights
+
+- Zoom-safe layout using `rem` + `clamp()` — holds at any browser zoom level
+- Streak multiplier scoring: `(streak + 1) × 15` per correct answer
+- All Categories mode draws 20 random questions across all 11 categories
+- Clean modular state management — single `state` object drives the entire game
+
+**[📖 View Documentation](docs/05QuizGame/README.md)**
+
+---
+
+### 6. ⚔️ Duel — Rock Paper Scissors
+
+**Location**: [`docs/06RockPaperScissors/`](docs/06RockPaperScissors/)  
+**Live Demo**: [https://lieujoy.github.io/InternPE/06RockPaperScissors/](https://lieujoy.github.io/InternPE/06RockPaperScissors/)
+
+A dark, minimal Rock Paper Scissors game against an AI that reads your patterns in real time. Dark arena aesthetic — deep charcoal, amber accent, ambient glow effects on all key UI elements, split welcome screen with move preview, seamless borderless battle layout. Instant AI response, live prediction bar, HP bars, achievements, and grades.
+
+#### Key Features
+
+- 🤖 **4 AI difficulty levels** — Easy (bot behavior) → Unbeatable (gg)
+- ⚡ **Instant AI response** — AI picks the same moment you do, zero delay
+- 🧠 **Mind-Read Bar** — live display of what the AI predicts you'll throw, based on your frequency history
+- ❤️ **HP bars** — drain as you lose rounds, visual tension
+- 🏆 **Best-of series** — Best of 3 / 5 / 7 or Endless
+- 📊 **Live stats** — Win Rate, Best Streak, Favourite Move
+- 🏅 **11 achievements** — persisted in `localStorage`
+- 📝 **Letter grade** (S/A/B/C/D) on match end with savage Gen-Z labels
+- 🎊 **Confetti** on match win, keyboard shortcuts `1`/`2`/`3`
+
+#### Tech Stack
+
+- **Frontend**: HTML5, CSS3 (vibrant neon arcade theme, `clamp()`, animated orbs)
+- **Logic**: Vanilla JavaScript ES6+ — zero dependencies
+- **Storage**: `localStorage` for achievements and all-time stats
+
+**[📖 View Documentation](docs/06RockPaperScissors/README.md)**
+
+---
+
 ## 📊 Project Comparison
 
-| Feature                | Calculator | TEN VAULT         | JUST DO IT        | Connect Four    |
-| ---------------------- | ---------- | ----------------- | ----------------- | --------------- |
-| **Complexity**         | ⭐ Simple  | ⭐⭐⭐ Advanced   | ⭐⭐ Intermediate | ⭐⭐⭐⭐ Expert |
-| **Files**              | 2          | 15+               | 3                 | 7               |
-| **Lines of Code**      | ~350       | ~1,500+           | ~1,200            | ~2,500+         |
-| **Pages**              | 1          | 5                 | 1 (+ Modal)       | 1 (+ Modals)    |
-| **Features**           | 8+         | 25+               | 15+               | 20+             |
-| **External Libraries** | None       | jQuery, Bootstrap | None              | None            |
-| **LocalStorage**       | No         | Yes               | Yes               | Yes             |
-| **Responsive**         | Yes        | Yes               | Yes               | Yes             |
-| **Dark Mode**          | No         | No                | Yes               | Custom Themes   |
+| Feature                | Calculator | TEN VAULT         | JUST DO IT        | Connect Four    | Brainrot Quiz   | Duel            |
+| ---------------------- | ---------- | ----------------- | ----------------- | --------------- | --------------- | --------------- |
+| **Complexity**         | ⭐ Simple  | ⭐⭐⭐ Advanced   | ⭐⭐ Intermediate | ⭐⭐⭐⭐ Expert | ⭐⭐⭐ Advanced | ⭐⭐ Intermediate |
+| **Files**              | 2          | 15+               | 3                 | 7               | 3               | 3               |
+| **Lines of Code**      | ~350       | ~1,500+           | ~1,200            | ~2,500+         | ~1,800+         | ~1,200+         |
+| **Pages**              | 1          | 5                 | 1 (+ Modal)       | 1 (+ Modals)    | 1 (+ Modals)    | 1 (+ Modal)     |
+| **Features**           | 8+         | 25+               | 15+               | 20+             | 20+             | 18+             |
+| **External Libraries** | None       | jQuery, Bootstrap | None              | None            | None            | None            |
+| **LocalStorage**       | No         | Yes               | Yes               | Yes             | Yes             | Yes             |
+| **Responsive**         | Yes        | Yes               | Yes               | Yes             | Yes             | Yes             |
+| **Dark Mode**          | No         | No                | Yes               | Custom Themes   | Always Dark     | Always Dark     |
 
 ---
 
@@ -223,6 +292,8 @@ Download and extract from GitHub
    - `docs/02TenVault/` for TEN VAULT Store
    - `docs/03JustDoIT/` for Todo App
    - `docs/04ConnectFour/` for Connect Four
+   - `docs/05QuizGame/` for Brainrot Quiz
+   - `docs/06RockPaperScissors/` for Duel
 2. Open `index.html` in your web browser
 3. Start exploring!
 
@@ -237,44 +308,47 @@ InternPE/
 ├── docs/                              # All projects directory
 │   │
 │   ├── 01Calculator/                  # Project 1: Calculator
-│   │   ├── index.html                # Calculator app (HTML + CSS)
-│   │   ├── script.js                 # Calculator logic
-│   │   └── README.md                 # Calculator documentation
+│   │   ├── index.html
+│   │   ├── script.js
+│   │   └── README.md
 │   │
 │   ├── 02TenVault/                    # Project 2: E-Commerce Store
-│   │   ├── index.html                # Main store page
-│   │   ├── style.css                 # Complete styling (46KB)
-│   │   ├── script.js                 # Store functionality
-│   │   ├── README.md                 # Store documentation
-│   │   ├── components/               # Additional pages
-│   │   │   ├── signin.html          # Sign in page
-│   │   │   ├── signup.html          # Sign up page
-│   │   │   ├── cart.html            # Shopping cart
-│   │   │   ├── login.html           # Login page
-│   │   │   └── product.html         # Product details
-│   │   └── img/                      # Images and assets
-│   │       ├── bg.jpg               # Hero background
-│   │       ├── logo-title.png       # TEN VAULT logo
-│   │       ├── bgm.mp3              # Background music
-│   │       └── products/            # Product images
+│   │   ├── index.html
+│   │   ├── style.css
+│   │   ├── script.js
+│   │   ├── README.md
+│   │   ├── components/
+│   │   └── img/
 │   │
-│   └── 03JustDoIT/                    # Project 3: Nike Todo App
-│       ├── index.html                # Todo app structure
-│       ├── styles.css                # Nike-themed styling (22KB)
-│       ├── script.js                 # Task management logic
-│       └── README.md                 # Todo app documentation
+│   ├── 03JustDoIT/                    # Project 3: Nike Todo App
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   ├── script.js
+│   │   └── README.md
+│   │
+│   ├── 04ConnectFour/                 # Project 4: Connect Four Anime Edition
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   ├── script.js
+│   │   ├── gameEngine.js
+│   │   ├── themeManager.js
+│   │   ├── aiPlayer.js
+│   │   ├── soundManager.js
+│   │   └── README.md
+│   │
+│   └── 05QuizGame/                    # Project 5: Brainrot Quiz
+│       ├── index.html
+│       ├── styles.css
+│       ├── script.js
+│       └── README.md
 │
-├── 04ConnectFour/                     # Project 4: Connect Four
-│   ├── index.html                    # Game board layout
-│   ├── styles.css                    # Anime theming & UI styling
-│   ├── script.js                     # Controller logic
-│   ├── gameEngine.js                 # Matrix state & Connect 4 logic
-│   ├── themeManager.js               # 11 diverse anime themes config
-│   ├── aiPlayer.js                   # MiniMax AI Engine
-│   ├── soundManager.js               # Audio handling
-│   └── README.md                     # Game documentation
+│   └── 06RockPaperScissors/           # Project 6: Duel
+│       ├── index.html
+│       ├── styles.css
+│       ├── script.js
+│       └── README.md
 │
-└── .git/                              # Git version control
+└── .git/
 ```
 
 ---
@@ -285,13 +359,13 @@ InternPE/
 
 | Technology            | Usage                      | Projects              |
 | --------------------- | -------------------------- | --------------------- |
-| **HTML5**             | Semantic structure         | All 4                 |
-| **CSS3**              | Modern styling, animations | All 4                 |
-| **JavaScript (ES6+)** | Logic and interactivity    | All 4                 |
+| **HTML5**             | Semantic structure         | All 5                 |
+| **CSS3**              | Modern styling, animations | All 5                 |
+| **JavaScript (ES6+)** | Logic and interactivity    | All 5                 |
 | **jQuery**            | DOM manipulation           | TEN VAULT             |
 | **Bootstrap 5**       | UI components              | TEN VAULT             |
 | **Boxicons**          | Icon library               | TEN VAULT             |
-| **LocalStorage API**  | Data persistence           | TEN VAULT, JUST DO IT |
+| **LocalStorage API**  | Data persistence           | TEN VAULT, JUST DO IT, Brainrot Quiz |
 
 ### CSS Features
 
@@ -444,6 +518,14 @@ All projects are fully responsive and tested on:
 - Scalable, optimized AI with heuristics
 - Advanced CSS and SVG rendering technique
 
+### 🫠 Brainrot Quiz Strengths
+
+- 55 questions across 11 categories — zero external data source
+- Letter grade system with animated reveal
+- Lifeline mechanics with Double Dip edge case handling
+- Fun facts after correct answers add educational value
+- Mid-game warning UX prevents accidental game loss
+
 ---
 
 ### Documentation
@@ -452,6 +534,8 @@ All projects are fully responsive and tested on:
 - [TEN VAULT Documentation](docs/02TenVault/README.md)
 - [JUST DO IT Documentation](docs/03JustDoIT/README.md)
 - [Connect Four Documentation](docs/04ConnectFour/README.md)
+- [Brainrot Quiz Documentation](docs/05QuizGame/README.md)
+- [Duel Documentation](docs/06RockPaperScissors/README.md)
 
 ---
 
@@ -481,18 +565,18 @@ These projects are part of the InternPE internship program and are created for e
 
 | Metric                       | Value         |
 | ---------------------------- | ------------- |
-| **Total Projects**           | 4             |
-| **Total Files**              | 27+           |
-| **Total Lines of Code**      | ~5,500+       |
-| **Total Features**           | 70+           |
+| **Total Projects**           | 6             |
+| **Total Files**              | 35+           |
+| **Total Lines of Code**      | ~8,500+       |
+| **Total Features**           | 108+          |
 | **Technologies**             | 7+            |
 | **Responsive Breakpoints**   | 4 per project |
-| **Zero-Dependency Projects** | 3/4           |
+| **Zero-Dependency Projects** | 5/6           |
 
 ---
 
 **Made with 💙 during InternPE Internship**
 
-_February 2026 | Portfolio of Progressive Web Development_
+_February–March 2026 | Portfolio of Progressive Web Development_
 
-**Explore the projects above to see the progression from simple calculator to complex e-commerce application!** 🚀
+**Explore the projects above to see the progression from simple calculator to a full-featured quiz game!** 🚀
